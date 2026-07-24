@@ -32,3 +32,10 @@ If you are developing a production application, we recommend using TypeScript wi
 If you get connection errors:
 - Run `ip addr show eth0 | grep inet` to get your WSL2 IP
 - Access via `http://<wsl-ip>:5173`
+
+## Development for WSL2 Users
+If you're using WSL2:
+1. Get your WSL2 IP: `ip addr show eth0 | grep inet`
+2. Run: `npm run dev:wsl` 
+3. Access via: `http://<your-wsl-ip>:5173` from Windows browser
+4. For hot-reload to work, update HMR host in your config
