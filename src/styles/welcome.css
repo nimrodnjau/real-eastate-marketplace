@@ -1,0 +1,457 @@
+/* ==========================================================================
+   Welcome page — shown once after login, before the role dashboard.
+   Reuses --db-* variables from dashboard.css (load that file first).
+   ========================================================================== */
+
+.welcome-shell {
+  min-height: 100svh;
+  background: var(--db-paper);
+  font-family: var(--db-font-body);
+  color: var(--db-ink);
+}
+
+/* ---------- Top nav (minimal — just brand + logout) ---------- */
+
+.welcome-topnav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 36px;
+  background: var(--db-surface);
+  border-bottom: 1px solid var(--db-border);
+}
+
+.welcome-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--db-font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--db-maroon-deep);
+}
+
+.welcome-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--db-border);
+  color: var(--db-ink);
+  border-radius: 7px;
+  padding: 7px 12px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.welcome-logout:hover {
+  background: var(--db-maroon);
+  border-color: var(--db-maroon);
+  color: #fff;
+}
+
+/* ---------- Hero ---------- */
+
+.welcome-hero {
+  position: relative;
+  isolation: isolate;   /* 👈 new — contains the z-index layers below so they can't bleed onto the cards section */
+  min-height: 62svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(135deg, var(--db-maroon-deep) 0%, var(--db-maroon) 55%, #2a0e13 100%);
+  color: #fff;
+  overflow: hidden;
+}
+.welcome-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.welcome-hero-bg-image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.welcome-hero-bg-image.is-active {
+  opacity: 1;
+}
+
+.welcome-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(20, 6, 9, 0.15) 0%, rgba(20, 6, 9, 0.55) 100%);
+}
+
+.welcome-hero-nav {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  padding: 16px 24px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.welcome-hero-nav a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.welcome-hero-nav a:hover {
+  color: #ffffff;
+}
+
+.welcome-hero-content {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+  animation: welcome-hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.welcome-hero-content h1 {
+  font-family: var(--db-font-display);
+  font-weight: 500;
+  font-size: 56px;
+  line-height: 1.1;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+@keyframes welcome-hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ---------- Quick action cards + continue button ---------- */
+
+.welcome-continue {
+  background: var(--db-surface);
+  padding: 0 24px;
+}
+
+.welcome-continue-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  transform: translateY(-40px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.welcome-continue-cards {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.welcome-card {
+  background: var(--db-surface);
+  border: 1px solid var(--db-border);
+  border-radius: 14px;
+  padding: 26px;
+  box-shadow: 0 16px 32px -16px rgba(42, 14, 19, 0.22);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.welcome-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 36px -14px rgba(42, 14, 19, 0.28);
+}
+
+.welcome-card h3 {
+  font-family: var(--db-font-display);
+  font-size: 19px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: var(--db-ink);
+}
+
+.welcome-card p {
+  font-size: 14px;
+  color: var(--db-ink-soft);
+  margin: 0 0 18px;
+  line-height: 1.5;
+}
+
+.welcome-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--db-maroon);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 9px 16px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, gap 0.2s ease;
+}
+
+.welcome-card-cta:hover {
+  background: var(--db-maroon-deep);
+  gap: 10px;
+}
+
+.welcome-dashboard-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--db-ink);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, gap 0.2s ease;
+}
+
+.welcome-dashboard-button:hover {
+  background: var(--db-maroon);
+  transform: translateY(-1px);
+  gap: 12px;
+}
+
+/* ---------- Services / marketing banners ---------- */
+
+.welcome-services {
+  background: var(--db-paper);
+  padding: 20px 24px 72px;
+}
+
+.welcome-services-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.welcome-services-heading h2 {
+  font-family: var(--db-font-display);
+  font-size: 32px;
+  font-weight: 500;
+  margin: 0 0 12px;
+  color: var(--db-ink);
+}
+
+.welcome-services-heading p {
+  font-size: 15px;
+  color: var(--db-ink-soft);
+  max-width: 62ch;
+  margin: 0 0 36px;
+  line-height: 1.6;
+}
+
+.welcome-services-banners {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.welcome-banner {
+  border-radius: 16px;
+  padding: 30px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-shadow: 0 12px 28px -16px rgba(42, 14, 19, 0.2);
+}
+
+.welcome-banner--dark {
+  background: var(--db-maroon-deep);
+  color: #fff;
+}
+
+.welcome-banner--dark p {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.welcome-banner--light {
+  background: var(--db-maroon-soft);
+  color: var(--db-ink);
+}
+
+.welcome-banner h3 {
+  font-family: var(--db-font-display);
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+.welcome-banner p {
+  font-size: 14px;
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+.welcome-banner-link {
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: inherit;
+}
+
+.welcome-banner-link--dark {
+  color: var(--db-maroon);
+}
+
+/* ---------- Helpful information ---------- */
+
+.welcome-helpful {
+  background: var(--db-maroon-soft);
+  padding: 56px 24px;
+}
+
+.welcome-helpful-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.welcome-helpful-inner h2 {
+  font-family: var(--db-font-display);
+  font-size: 28px;
+  font-weight: 500;
+  margin: 0 0 10px;
+  color: var(--db-ink);
+}
+
+.welcome-helpful-inner > p {
+  font-size: 14.5px;
+  color: var(--db-ink-soft);
+  margin: 0 0 32px;
+  max-width: 60ch;
+}
+
+.welcome-guides {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.welcome-guide-card {
+  background: var(--db-surface);
+  border-radius: 14px;
+  padding: 24px;
+}
+
+.welcome-guide-card h3 {
+  font-family: var(--db-font-display);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: var(--db-ink);
+}
+
+.welcome-guide-card p {
+  font-size: 14px;
+  color: var(--db-ink-soft);
+  margin: 0 0 14px;
+  line-height: 1.5;
+}
+
+/* ---------- Closer (agents & offices) ---------- */
+
+.welcome-closer {
+  position: relative;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #2a0e13 0%, var(--db-maroon-deep) 100%);
+  color: #fff;
+  overflow: hidden;
+}
+
+.welcome-closer-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(122, 18, 32, 0.4), transparent 60%);
+}
+
+.welcome-closer-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.welcome-closer-inner h2 {
+  font-family: var(--db-font-display);
+  font-size: 32px;
+  font-weight: 500;
+  margin: 0 0 10px;
+}
+
+.welcome-closer-inner p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0 0 20px;
+}
+
+.welcome-closer-link {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 768px) {
+  .welcome-hero-content h1 {
+    font-size: 36px;
+  }
+
+  .welcome-hero-nav {
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .welcome-continue-inner {
+    transform: translateY(-24px);
+  }
+
+  .welcome-services,
+  .welcome-helpful {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome-hero-content,
+  .welcome-card,
+  .welcome-dashboard-button,
+  .welcome-card-cta {
+    animation: none !important;
+    transition: none !important;
+  }
+}

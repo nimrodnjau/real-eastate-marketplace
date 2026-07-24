@@ -1,0 +1,263 @@
+/* ==========================================================================
+   Professional profile modal (agents/lawyers/valuers/surveyors)
+   Extracted from dashboard.css into its own file. Uses the same --db-*
+   tokens as the rest of the dashboard design system. Each var() below now
+   carries a fallback matching the real dashboard.css :root values, so this
+   renders correctly even on pages that don't load dashboard.css (e.g. the
+   buyer marketplace) — if the real --db-* tokens ARE defined on the page,
+   they still win; fallbacks only kick in when a variable is undefined.
+   ========================================================================== */
+
+.agent-profile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  padding: 16px;
+}
+
+.agent-profile-modal {
+  position: relative;
+  width: min(560px, 100%);
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--db-surface, #ffffff);
+  border-radius: 14px;
+  padding: 32px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+.agent-profile-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--db-paper, #faf6f6);
+  color: var(--db-ink-soft, #6e5257);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.agent-profile-close:hover {
+  background: var(--db-maroon-soft, #f3dee0);
+  color: var(--db-maroon, #7a1220);
+}
+
+.agent-profile-hero {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.agent-profile-avatar {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--db-border, #e7dcdc);
+  flex-shrink: 0;
+  background: var(--db-paper, #faf6f6);
+}
+
+.agent-profile-name {
+  font-family: var(--db-font-display, 'Spectral', Georgia, serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--db-ink, #2a0e13);
+  margin: 0 0 4px;
+}
+
+.agent-profile-agency {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--db-font-body, 'Inter', system-ui, sans-serif);
+  font-size: 0.85rem;
+  color: var(--db-ink-soft, #6e5257);
+  margin: 0 0 6px;
+}
+
+.agent-profile-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--db-font-body, 'Inter', system-ui, sans-serif);
+  font-size: 0.8rem;
+  color: var(--db-ink-soft, #6e5257);
+}
+
+.agent-profile-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 12px;
+  padding: 16px 0;
+  margin-bottom: 20px;
+  border-top: 1px solid var(--db-border, #e7dcdc);
+  border-bottom: 1px solid var(--db-border, #e7dcdc);
+}
+
+.agent-profile-stat {
+  text-align: center;
+}
+
+.agent-profile-stat-value {
+  font-family: var(--db-font-mono, 'IBM Plex Mono', ui-monospace, monospace);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--db-maroon, #7a1220);
+  margin: 0;
+}
+
+.agent-profile-stat-label {
+  font-family: var(--db-font-body, 'Inter', system-ui, sans-serif);
+  font-size: 0.72rem;
+  color: var(--db-ink-soft, #6e5257);
+  margin: 2px 0 0;
+}
+
+.agent-profile-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.agent-profile-contact-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--db-font-body, 'Inter', system-ui, sans-serif);
+  font-size: 0.85rem;
+  color: var(--db-ink, #2a0e13);
+  text-decoration: none;
+}
+
+.agent-profile-contact-row svg {
+  color: var(--db-maroon, #7a1220);
+  flex-shrink: 0;
+}
+
+.agent-profile-contact-row:hover {
+  color: var(--db-maroon, #7a1220);
+}
+
+.agent-profile-contact-row--muted {
+  color: var(--db-ink-soft, #6e5257);
+}
+
+.agent-profile-contact-row--muted svg {
+  color: var(--db-ink-soft, #6e5257);
+}
+
+.agent-profile-section-title {
+  font-family: var(--db-font-body, 'Inter', system-ui, sans-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--db-ink-soft, #6e5257);
+  margin: 0 0 12px;
+}
+
+.agent-profile-bio {
+  font-family: var(--db-font-body, 'Inter', system-ui, sans-serif);
+  font-size: 0.88rem;
+  color: var(--db-ink, #2a0e13);
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+.agent-profile-map {
+  border: 0;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.agent-profile-listings {
+  margin-bottom: 24px;
+}
+
+.agent-profile-listing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.agent-profile-listing-card img,
+.agent-profile-listing-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 6px;
+  object-fit: cover;
+  background: var(--db-paper, #faf6f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  color: var(--db-ink-soft, #6e5257);
+  margin-bottom: 6px;
+}
+
+.agent-profile-listing-title {
+  font-family: var(--db-font-body, 'Inter', system-ui, sans-serif);
+  font-size: 0.75rem;
+  color: var(--db-ink, #2a0e13);
+  margin: 0 0 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agent-profile-listing-price {
+  font-family: var(--db-font-mono, 'IBM Plex Mono', ui-monospace, monospace);
+  font-size: 0.72rem;
+  color: var(--db-maroon, #7a1220);
+  margin: 0;
+}
+
+@media (max-width: 560px) {
+  .agent-profile-modal {
+    padding: 24px 20px;
+  }
+  .agent-profile-listing-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.agent-profile-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.agent-profile-map-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.agent-profile-map-action {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--brand-color, #2563eb);
+  text-decoration: none;
+}
+
+.agent-profile-map-action:hover {
+  text-decoration: underline;
+}
+
+.agent-profile-address {
+  font-size: 13px;
+  color: #6b7280;
+  margin: -4px 0 8px;
+}

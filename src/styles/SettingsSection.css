@@ -1,0 +1,126 @@
+/* components/dashboard/SettingsSection.jsx styles
+   Design system: dark maroon/white, Spectral (headings), Inter (body), IBM Plex Mono (mono/labels) */
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 560px;
+  font-family: 'Inter', sans-serif;
+}
+
+.settings-block {
+  background: #ffffff;
+  border: 1px solid #ead9d9;
+  border-radius: 10px;
+  padding: 1.75rem;
+}
+
+.settings-block-title {
+  font-family: 'Spectral', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #4a0e0e;
+  margin: 0 0 1.25rem 0;
+}
+
+.settings-block-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #6b5555;
+  margin: 0;
+}
+
+/* Form */
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.profile-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #5c3a3a;
+}
+
+.profile-form input[type='password'] {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: #2a1414;
+  background: #fffaf9;
+  border: 1px solid #d9c2c2;
+  border-radius: 6px;
+  padding: 0.65rem 0.8rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.profile-form input[type='password']:focus {
+  border-color: #7a1f1f;
+  box-shadow: 0 0 0 3px rgba(122, 31, 31, 0.12);
+}
+
+.profile-form input[type='password']:invalid:not(:placeholder-shown) {
+  border-color: #b23a3a;
+}
+
+.profile-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.25rem;
+}
+
+.profile-form-actions button {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #ffffff;
+  background: #7a1f1f;
+  border: none;
+  border-radius: 6px;
+  padding: 0.65rem 1.4rem;
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.profile-form-actions button:hover:not(:disabled) {
+  background: #5c1717;
+}
+
+.profile-form-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.profile-form-success {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: #1e7a3c;
+  margin: 0;
+}
+
+.profile-form-error {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: #b23a3a;
+  margin: 0;
+}
+
+/* Danger zone */
+
+.settings-block--danger {
+  background: #fbf3f2;
+  border: 1px solid #e3b8b8;
+}
+
+.settings-block--danger .settings-block-title {
+  color: #7a1f1f;
+}

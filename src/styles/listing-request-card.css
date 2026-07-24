@@ -1,0 +1,170 @@
+/* Reuses --maroon-*, --font-*, --hairline, --paper, --ink, --muted tokens
+   defined in dashboard-photos.css / global tokens file, plus .stamp-badge
+   from dashboard.css (the pending-review ribbon). Mirrors listing-card.css
+   so request cards and active listing cards sit together without looking
+   like two different systems. */
+
+.listing-request-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 18px;
+}
+
+.listing-request-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--paper, #fff);
+  border: 1px solid var(--hairline, #e7dcdb);
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  transition: box-shadow 180ms ease, transform 180ms ease, border-color 180ms ease;
+}
+
+.listing-request-card:hover {
+  box-shadow: 0 10px 28px rgba(43, 13, 16, 0.12);
+  transform: translateY(-2px);
+  border-color: var(--maroon-600, #82232c);
+}
+
+.listing-request-card:focus-visible {
+  outline: 2px solid var(--maroon-600, #82232c);
+  outline-offset: 2px;
+}
+
+.listing-request-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--paper-warm, #faf6f5);
+}
+
+.listing-request-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.listing-request-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted, #8a7274);
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.8rem;
+}
+
+/* Positions the shared .stamp-badge (dashboard.css) onto the card image
+   the same way listing-card-status sits on ListingCard. */
+.listing-request-card .stamp-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.listing-request-photo-count {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: rgba(34, 26, 27, 0.72);
+  color: var(--paper, #fff);
+}
+
+.listing-request-body {
+  padding: 12px 14px 14px;
+}
+
+.listing-request-title {
+  font-family: var(--font-display, 'Spectral', Georgia, serif);
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--ink, #221a1b);
+  margin: 0 0 2px;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.listing-request-type {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.78rem;
+  color: var(--muted, #8a7274);
+  margin: 0 0 12px;
+}
+
+.listing-request-facts {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--hairline, #e7dcdb);
+  min-height: 20px;
+}
+
+.listing-request-fact {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.82rem;
+  color: var(--ink, #221a1b);
+}
+
+.listing-request-fact svg {
+  color: var(--muted, #8a7274);
+}
+
+.listing-request-price-label {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.72rem;
+  color: var(--muted, #8a7274);
+  margin: 0 0 2px;
+}
+
+.listing-request-price {
+  font-family: var(--font-display, 'Spectral', Georgia, serif);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--maroon-800, #5a1a20);
+  margin: 0 0 12px;
+}
+
+.listing-request-seller {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hairline, #e7dcdb);
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.78rem;
+}
+
+.listing-request-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted, #8a7274);
+}
+
+.listing-request-seller span:last-child {
+  color: var(--ink, #221a1b);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 60%;
+}

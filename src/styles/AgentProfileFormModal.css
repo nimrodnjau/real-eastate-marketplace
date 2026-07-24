@@ -1,0 +1,142 @@
+/* ProfileFormModal.css
+   Matches the listings-page design system: maroon + sand palette,
+   Tiempos serif headings, Suisse Intl body text, sharp (2px) corners. */
+
+.profile-form-overlay {
+  --pf-maroon: #7a1220;
+  --pf-maroon-deep: #4f0b15;
+  --pf-sand: #f2e9dc;
+  --pf-ink: #1c1917;
+  --pf-ink-soft: #4a433d;
+  --pf-line: rgba(28, 25, 23, 0.12);
+
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 25, 23, 0.55);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 48px 16px;
+  overflow-y: auto;
+  z-index: 1000;
+  font-family: 'Suisse Intl', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.profile-form-modal {
+  width: 100%;
+  max-width: 480px;
+  background: #fff;
+  border: 1px solid var(--pf-line);
+  border-radius: 2px;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(28, 25, 23, 0.2);
+}
+
+.profile-form-modal h2 {
+  font-family: 'Tiempos Headline', Georgia, 'Times New Roman', serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  font-size: 20px;
+  color: var(--pf-ink);
+  margin: 0 0 20px;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.profile-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--pf-ink-soft);
+}
+
+.profile-form input,
+.profile-form textarea {
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 400;
+  color: var(--pf-ink);
+  padding: 10px 12px;
+  border: 1px solid var(--pf-line);
+  border-radius: 2px;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.profile-form input:focus-visible,
+.profile-form textarea:focus-visible {
+  outline: 2px solid var(--pf-maroon);
+  outline-offset: 1px;
+}
+
+.profile-form input::placeholder,
+.profile-form textarea::placeholder {
+  color: #a39a90;
+}
+
+.profile-form textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.profile-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.profile-form-actions button {
+  padding: 10px 18px;
+  border-radius: 2px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+
+.profile-form-actions button[type='button'] {
+  border: 1px solid var(--pf-line);
+  background: transparent;
+  color: var(--pf-ink-soft);
+}
+
+.profile-form-actions button[type='button']:hover {
+  border-color: var(--pf-maroon);
+  color: var(--pf-maroon);
+}
+
+.profile-form-actions button[type='submit'] {
+  border: 1px solid var(--pf-maroon);
+  background: var(--pf-maroon);
+  color: var(--pf-sand);
+}
+
+.profile-form-actions button[type='submit']:hover:not(:disabled) {
+  background: var(--pf-maroon-deep);
+  border-color: var(--pf-maroon-deep);
+}
+
+.profile-form-actions button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .profile-form-modal {
+    padding: 24px 20px;
+  }
+  .profile-form-actions {
+    flex-direction: column-reverse;
+  }
+  .profile-form-actions button {
+    width: 100%;
+  }
+}

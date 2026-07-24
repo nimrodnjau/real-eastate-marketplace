@@ -1,0 +1,64 @@
+/* Uses the same --db-* tokens as dashboard.css / escrow-table, since this
+   sits in the same "financials-block" family as FinancialsSection. */
+
+.commission-activity-table {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.commission-activity-row {
+  display: grid;
+  grid-template-columns: 100px 1.8fr 1fr 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--db-border, #e7dcdc);
+  font-family: var(--db-font-body, 'Inter', sans-serif);
+  font-size: 0.82rem;
+  color: var(--db-ink, #2a0e13);
+}
+
+.commission-activity-row--head {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--db-ink-soft, #6e5257);
+  border-bottom: 1px solid var(--db-border, #e7dcdc);
+}
+
+.commission-activity-date {
+  font-family: var(--db-font-mono, monospace);
+  font-size: 0.76rem;
+  color: var(--db-ink-soft, #6e5257);
+}
+
+.commission-activity-title {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.commission-activity-amount {
+  font-family: var(--db-font-mono, monospace);
+  font-weight: 600;
+  color: var(--db-maroon, #7a1220);
+}
+
+@media (max-width: 720px) {
+  .commission-activity-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 12px 4px;
+  }
+  .commission-activity-row--head {
+    display: none;
+  }
+  .commission-activity-amount::before {
+    content: 'Amount: ';
+    color: var(--db-ink-soft, #6e5257);
+    font-weight: 400;
+  }
+}

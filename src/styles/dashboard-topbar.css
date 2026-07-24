@@ -1,0 +1,357 @@
+/* ==========================================================================
+   Top-bar dashboard layout — maroon & white, premium motion
+   --------------------------------------------------------------------------
+   Adds to (does not replace) dashboard.css — keep both files loaded.
+   Structure: sticky top nav with animated sliding tab indicator, a hero
+   banner with a "Welcome {name}" overline, then the existing section-card /
+   stat-grid / list-row styles below (unchanged, reused as-is).
+   ========================================================================== */
+
+.dash-shell-top {
+  min-height: 100svh;
+  background: var(--db-paper);
+  font-family: var(--db-font-body);
+  color: var(--db-ink);
+}
+
+/* ---------- Top nav ---------- */
+
+.dash-topnav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 14px 36px;
+  background: var(--db-surface);
+  border-bottom: 1px solid var(--db-border);
+}
+
+.dash-topnav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--db-font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--db-maroon-deep);
+  flex-shrink: 0;
+}
+
+.dash-topnav-brand .dash-brand-mark {
+  color: var(--db-maroon);
+  display: inline-flex;
+  transform: rotate(-8deg);
+}
+
+.dash-topnav-tabs {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.dash-topnav-tab {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--db-ink-soft);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: color 0.2s ease, background 0.2s ease;
+  white-space: nowrap;
+}
+
+.dash-topnav-tab:hover {
+  color: var(--db-maroon);
+  background: var(--db-maroon-soft);
+}
+
+.dash-topnav-tab.active {
+  color: var(--db-maroon);
+}
+
+.dash-topnav-tab:focus-visible {
+  outline: 2px solid var(--db-maroon);
+  outline-offset: 2px;
+}
+
+/* The sliding underline. Positioned via inline transform/width computed in
+   JS from the active tab's offsetLeft/offsetWidth, animated with a spring-y
+   cubic-bezier so it "settles" into place rather than moving linearly. */
+.dash-topnav-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2.5px;
+  background: var(--db-maroon);
+  border-radius: 999px;
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+              width 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dash-topnav-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.dash-topnav-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: var(--db-maroon-deep);
+  color: #fff;
+  font-family: var(--db-font-display);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dash-topnav-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--db-border);
+  color: var(--db-ink);
+  border-radius: 7px;
+  padding: 7px 12px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.dash-topnav-logout:hover {
+  background: var(--db-maroon);
+  border-color: var(--db-maroon);
+  color: #fff;
+}
+
+/* ---------- Secondary utility bar (Knight Frank-style dark strip) ---------- */
+
+.dash-utilitybar {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 11px 36px;
+  background: var(--db-ink);
+}
+
+.dash-utilitybar-link {
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.dash-utilitybar-link:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.dash-utilitybar-link:hover {
+  color: #ffffff;
+}
+
+.dash-utilitybar-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .dash-utilitybar {
+    padding: 10px 18px;
+    gap: 18px;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .dash-utilitybar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dash-utilitybar-link {
+    white-space: nowrap;
+  }
+}
+
+/* ---------- Hero banner ---------- */
+
+.dash-hero {
+  position: relative;
+  height: 320px;
+  display: flex;
+  align-items: flex-end;
+  background: linear-gradient(135deg, var(--db-maroon-deep) 0%, var(--db-maroon) 55%, #2a0e13 100%);
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+.dash-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 6, 9, 0.35) 0%, rgba(20, 6, 9, 0.72) 100%);
+}
+
+.dash-hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 0 40px 34px;
+  max-width: 760px;
+  animation: dash-hero-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dash-hero-content h1 {
+  font-family: var(--db-font-display);
+  font-weight: 500;
+  font-size: 44px;
+  line-height: 1.1;
+  color: #ffffff;
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+}
+
+.dash-hero-content p {
+  font-size: 15.5px;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0 0 14px;
+  max-width: 56ch;
+}
+
+.stamp-badge--on-hero {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+}
+
+@keyframes dash-hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Content area ---------- */
+
+.dash-main-top {
+  display: flex;
+  justify-content: center;
+  padding: 0 36px 48px;
+}
+
+.dash-content-top {
+  width: 100%;
+  max-width: 1100px;
+  margin-top: -44px; /* pulls content up so cards overlap the hero slightly */
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  /* Fade + rise in every time the active tab changes (the `key={activeId}`
+     on this element in JSX remounts it, restarting the animation). */
+  animation: dash-content-fade 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes dash-content-fade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Elevate section/stat cards slightly since they now sit over the hero
+   edge — a soft shadow reads better here than the flat border look. */
+.dash-content-top .section-card,
+.dash-content-top .stat-card {
+  box-shadow: 0 8px 24px -12px rgba(42, 14, 19, 0.18);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.dash-content-top .stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -12px rgba(42, 14, 19, 0.24);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .dash-topnav {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 18px;
+  }
+
+  .dash-topnav-tabs {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .dash-topnav-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dash-hero {
+    height: 240px;
+  }
+
+  .dash-hero-content {
+    padding: 0 20px 24px;
+  }
+
+  .dash-hero-content h1 {
+    font-size: 32px;
+  }
+
+  .dash-main-top {
+    padding: 0 18px 36px;
+  }
+
+  .dash-content-top {
+    margin-top: -28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dash-topnav-indicator,
+  .dash-topnav-tab,
+  .dash-topnav-logout,
+  .dash-hero-content,
+  .dash-content-top,
+  .dash-content-top .stat-card {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -1,0 +1,300 @@
+/* AdminDashboard.css
+   Sidebar layout, white content area, dark maroon accents.
+   Ledger-style rows kept for the approval queue; actions are solid
+   maroon buttons instead of stamps. */
+
+:root {
+  --maroon: #3b0a14;
+  --maroon-dark: #260710;
+  --maroon-hover: #4d0f1c;
+  --white: #ffffff;
+  --paper-line: #e7e1e0;
+  --ink: #201014;
+  --muted: #8a7d80;
+  --gold: #a8763a;
+  --rust: #a83f34;
+  --font-display: "Spectral", serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+.office {
+  display: flex;
+  min-height: 100vh;
+  background: var(--white);
+  font-family: var(--font-body);
+  color: var(--ink);
+}
+
+/* ---------- Sidebar ---------- */
+
+.office-sidebar {
+  width: 200px;
+  background: var(--maroon);
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.office-title {
+  font-family: var(--font-display);
+  color: var(--white);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 0 8px 18px;
+}
+
+.office-nav-item {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  text-align: left;
+  color: #d9c6ca;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.office-nav-item:hover {
+  background: var(--maroon-hover);
+  color: var(--white);
+}
+
+.office-nav-item.is-active {
+  background: var(--maroon-hover);
+  color: var(--white);
+}
+
+/* ---------- Body ---------- */
+
+.office-body {
+  flex: 1;
+  background: var(--white);
+  padding: 28px 30px;
+  position: relative;
+}
+
+.office-loading {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--maroon);
+  margin: 0 0 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--paper-line);
+}
+
+/* ---------- Overview: index cards ---------- */
+
+.index-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 26px;
+}
+
+.index-cell {
+  flex: 1 1 160px;
+  background: var(--white);
+  border: 1px solid var(--paper-line);
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.index-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.index-value {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--maroon);
+}
+
+.office-note {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  padding: 16px 18px;
+  border: 1px dashed var(--paper-line);
+  border-radius: 8px;
+}
+
+/* ---------- Approvals ---------- */
+
+.filter-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  font-family: var(--font-body);
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--paper-line);
+  background: var(--white);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.filter-chip.is-active {
+  background: var(--maroon);
+  border-color: var(--maroon);
+  color: var(--white);
+}
+
+.empty-note {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--muted);
+  padding: 20px 0;
+}
+
+.ledger-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--white);
+  border: 1px solid var(--paper-line);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+}
+
+.ledger-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ledger-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.ledger-type {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+}
+.ledger-type.type-agent { color: var(--gold); }
+.ledger-type.type-seller { color: #5c7452; }
+.ledger-type.type-listing { color: #3b5f7a; }
+.ledger-type.type-landlord { color: var(--rust); }
+
+.ledger-name {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14.5px;
+  color: var(--ink);
+}
+
+.ledger-detail {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.ledger-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ---------- Buttons: solid dark maroon ---------- */
+
+.btn {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--maroon);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--maroon);
+  color: var(--white);
+}
+.btn-primary:hover {
+  background: var(--maroon-hover);
+}
+
+.btn-secondary {
+  background: var(--white);
+  color: var(--maroon);
+}
+.btn-secondary:hover {
+  background: #f7ecee;
+}
+
+/* ---------- Placeholder ---------- */
+
+.placeholder-note {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--muted);
+  padding: 16px 18px;
+  border: 1px dashed var(--paper-line);
+  border-radius: 8px;
+}
+
+/* ---------- Toast ---------- */
+
+.office-toast {
+  position: absolute;
+  bottom: 20px;
+  right: 30px;
+  background: var(--maroon);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 13px;
+  padding: 9px 16px;
+  border-radius: 6px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 640px) {
+  .office {
+    flex-direction: column;
+  }
+  .office-sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .ledger-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

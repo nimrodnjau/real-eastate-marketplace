@@ -1,0 +1,198 @@
+.viewing-request-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.viewing-request-date-input {
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--db-border, #e7dcdc);
+  background: var(--db-surface, #ffffff);
+  color: var(--db-ink, #2a0e13);
+  font-family: var(--db-font-body, 'Inter', system-ui, sans-serif);
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.viewing-request-date-input:focus {
+  outline: none;
+  border-color: var(--db-maroon, #7a1220);
+}
+
+.viewing-request-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  background: var(--db-maroon, #7a1220);
+  color: #ffffff;
+  font-family: var(--db-font-body, 'Inter', system-ui, sans-serif);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.viewing-request-btn:hover:not(:disabled) {
+  background: var(--db-maroon-deep, #4a0b13);
+}
+
+.viewing-request-btn:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.viewing-request-btn--loading {
+  background: var(--db-paper, #faf6f6);
+  color: var(--db-ink-soft, #6e5257);
+}
+
+.viewing-request-spinner {
+  animation: viewing-request-spin 0.8s linear infinite;
+}
+
+@keyframes viewing-request-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.viewing-request-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-family: var(--db-font-body, 'Inter', system-ui, sans-serif);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Pending uses brick (warm/amber-ish in this palette) — waiting on the agent.
+   Confirmed uses sage (green) — booked. Both tokens already exist in
+   dashboard.css but weren't used in the professional profile modal, so this
+   is the first place they're pulled in. */
+.viewing-request-status--pending {
+  background: var(--db-brick-soft, #f6e2dc);
+  color: var(--db-brick, #b5482f);
+}
+
+.viewing-request-status--confirmed {
+  background: var(--db-sage-soft, #e1eae3);
+  color: var(--db-sage, #3f6b54);
+}
+
+.viewing-request-error {
+  margin: 6px 0 0;
+  font-family: var(--db-font-body, 'Inter', system-ui, sans-serif);
+  font-size: 0.78rem;
+  color: var(--db-brick, #b5482f);
+}
+
+.viewing-request-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.viewing-request-date-input {
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--db-border, #e7dcdc);
+  background: var(--db-surface, #ffffff);
+  color: var(--db-ink, #2a0e13);
+  font-family: var(--db-font-body, 'Inter', system-ui, sans-serif);
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.viewing-request-date-input:focus {
+  outline: none;
+  border-color: var(--db-maroon, #7a1220);
+}
+
+.viewing-request-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  background: var(--db-maroon, #7a1220);
+  color: #ffffff;
+  font-family: var(--db-font-body, 'Inter', system-ui, sans-serif);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.viewing-request-btn:hover:not(:disabled) {
+  background: var(--db-maroon-deep, #4a0b13);
+}
+
+.viewing-request-btn:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.viewing-request-btn--loading {
+  background: var(--db-paper, #faf6f6);
+  color: var(--db-ink-soft, #6e5257);
+}
+
+.viewing-request-spinner {
+  animation: viewing-request-spin 0.8s linear infinite;
+}
+
+@keyframes viewing-request-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.viewing-request-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-family: var(--db-font-body, 'Inter', system-ui, sans-serif);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Pending uses brick (warm/amber-ish in this palette) — waiting on the agent.
+   Confirmed uses sage (green) — booked. Both tokens already exist in
+   dashboard.css but weren't used in the professional profile modal, so this
+   is the first place they're pulled in. */
+.viewing-request-status--pending {
+  background: var(--db-brick-soft, #f6e2dc);
+  color: var(--db-brick, #b5482f);
+}
+
+.viewing-request-status--confirmed {
+  background: var(--db-sage-soft, #e1eae3);
+  color: var(--db-sage, #3f6b54);
+}
+
+.viewing-request-error {
+  margin: 6px 0 0;
+  font-family: var(--db-font-body, 'Inter', system-ui, sans-serif);
+  font-size: 0.78rem;
+  color: var(--db-brick, #b5482f);
+}
+
+.list-row-edit-btn--decline {
+  color: var(--db-brick, #b5482f);
+  border-color: var(--db-brick-soft, #f6e2dc);
+}
+
+.list-row-edit-btn--decline:hover:not(:disabled) {
+  background: var(--db-brick-soft, #f6e2dc);
+}

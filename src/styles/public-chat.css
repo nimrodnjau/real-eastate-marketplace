@@ -1,0 +1,420 @@
+/* ==========================================================================
+   Standalone page shell (used by pages that live outside DashboardLayout,
+   e.g. Public Chat at /community)
+   ========================================================================== */
+
+.standalone-page {
+  min-height: 100svh;
+  background: var(--db-paper);
+  display: flex;
+  flex-direction: column;
+}
+
+.standalone-page-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 32px;
+  background: var(--db-surface);
+  border-bottom: 1px solid var(--db-border);
+  flex-shrink: 0;
+}
+
+.standalone-page-back {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--db-border);
+  background: var(--db-surface);
+  color: var(--db-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 150ms ease, color 150ms ease;
+}
+
+.standalone-page-back:hover {
+  border-color: var(--db-maroon);
+  color: var(--db-maroon);
+}
+
+.standalone-page-back:focus-visible {
+  outline: 2px solid var(--db-maroon);
+  outline-offset: 2px;
+}
+
+.standalone-page-header h1 {
+  font-family: var(--db-font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--db-ink);
+  margin: 0 0 2px;
+}
+
+.standalone-page-header p {
+  font-family: var(--db-font-body);
+  font-size: 0.85rem;
+  color: var(--db-ink-soft);
+  margin: 0;
+}
+
+.standalone-page-body {
+  flex: 1;
+  min-height: 0;
+  padding: 24px 32px 32px;
+  display: flex;
+}
+
+@media (max-width: 720px) {
+  .standalone-page-header {
+    padding: 16px 18px;
+  }
+  .standalone-page-body {
+    padding: 16px;
+  }
+}
+
+/* ==========================================================================
+   Public chat (WhatsApp-style group feed) — mirrors .messaging-bubble
+   patterns, but every message shows its author since this is a group feed,
+   and adds an optional quoted-reply block above the message text.
+   ========================================================================== */
+
+.public-chat {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  border: 1px solid var(--db-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--db-surface);
+}
+
+.public-chat-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background:
+    radial-gradient(circle, var(--db-border) 1px, transparent 1px) 0 0 / 22px 22px,
+    var(--db-paper);
+}
+
+.chat-bubble-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.chat-bubble-row--own {
+  justify-content: flex-end;
+}
+
+.chat-bubble {
+  max-width: 62%;
+  background: var(--db-surface);
+  border: 1px solid var(--db-border);
+  border-radius: 12px 12px 12px 3px;
+  padding: 9px 13px 7px;
+}
+
+.chat-bubble--own {
+  background: var(--db-maroon-soft);
+  border-color: var(--db-maroon-soft);
+  border-radius: 12px 12px 3px 12px;
+}
+
+.chat-bubble-author {
+  font-family: var(--db-font-body);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--db-maroon);
+  margin: 0 0 4px;
+}
+
+.chat-bubble-role {
+  font-weight: 400;
+  color: var(--db-ink-soft);
+  text-transform: capitalize;
+}
+
+.chat-bubble-quote {
+  border-left: 3px solid var(--db-maroon);
+  background: rgba(122, 18, 32, 0.06);
+  border-radius: 4px;
+  padding: 5px 9px;
+  margin: 0 0 6px;
+}
+
+.chat-bubble--own .chat-bubble-quote {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.chat-bubble-quote-author {
+  font-family: var(--db-font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--db-maroon);
+  margin: 0 0 1px;
+}
+
+.chat-bubble-quote-text {
+  font-family: var(--db-font-body);
+  font-size: 0.76rem;
+  color: var(--db-ink-soft);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-bubble-text {
+  font-family: var(--db-font-body);
+  font-size: 0.86rem;
+  color: var(--db-ink);
+  margin: 0 0 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.chat-bubble-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.chat-bubble-time {
+  font-family: var(--db-font-mono);
+  font-size: 0.65rem;
+  color: var(--db-ink-soft);
+}
+
+.chat-bubble--own .chat-bubble-time {
+  color: var(--db-maroon);
+}
+
+.chat-bubble-reply-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: var(--db-font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--db-ink-soft);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 150ms ease, color 150ms ease;
+}
+
+.chat-bubble-row:hover .chat-bubble-reply-btn {
+  opacity: 1;
+}
+
+.chat-bubble-reply-btn:hover {
+  color: var(--db-maroon);
+}
+
+.chat-bubble-reply-btn:focus-visible {
+  opacity: 1;
+  outline: 2px solid var(--db-maroon);
+  outline-offset: 2px;
+}
+
+/* ---------- Composer ---------- */
+
+.public-chat-composer {
+  flex-shrink: 0;
+  border-top: 1px solid var(--db-border);
+  background: var(--db-surface);
+}
+
+.public-chat-replying-banner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 16px;
+  background: var(--db-maroon-soft);
+  border-bottom: 1px solid var(--db-border);
+}
+
+.public-chat-replying-author {
+  font-family: var(--db-font-body);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--db-maroon);
+  margin: 0 0 1px;
+}
+
+.public-chat-replying-text {
+  font-family: var(--db-font-body);
+  font-size: 0.78rem;
+  color: var(--db-ink-soft);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 60ch;
+}
+
+.public-chat-replying-banner button {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  color: var(--db-maroon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.public-chat-replying-banner button:hover {
+  background: rgba(122, 18, 32, 0.12);
+}
+
+.public-chat-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 12px 16px;
+}
+.public-chat-input-row--relative {
+  position: relative;
+}
+
+.mention-dropdown {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 16px;
+  right: 16px;
+  max-height: 220px;
+  overflow-y: auto;
+  background: var(--db-surface);
+  border: 1px solid var(--db-border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  z-index: 20;
+  padding: 4px;
+}
+
+.mention-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  /* explicit resets so this doesn't inherit the circular send-button look
+     from any nearby `button` selector scoped to this same container */
+  height: auto;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 7px;
+  background: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--db-font-body);
+  flex-shrink: 0;
+}
+
+.mention-dropdown-item:hover,
+.mention-dropdown-item--active {
+  background: var(--db-maroon-soft);
+}
+
+.mention-dropdown-name {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--db-ink);
+}
+
+.mention-dropdown-role {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--db-ink-soft);
+  text-transform: capitalize;
+  flex-shrink: 0;
+}
+
+.public-chat-input-row textarea {
+  flex: 1;
+  resize: none;
+  max-height: 120px;
+  padding: 10px 14px;
+  border: 1px solid var(--db-border);
+  border-radius: 18px;
+  font-family: var(--db-font-body);
+  font-size: 0.88rem;
+  color: var(--db-ink);
+  line-height: 1.4;
+}
+
+.public-chat-input-row textarea:focus {
+  outline: none;
+  border-color: var(--db-maroon);
+}
+
+/* IMPORTANT: scoped to a direct child (`>`) so this circular send-button
+   style does NOT also match the mention-dropdown buttons, which are
+   nested deeper inside this same .public-chat-input-row container. */
+.public-chat-input-row > button {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: var(--db-maroon);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.public-chat-input-row > button:hover:not(:disabled) {
+  background: var(--db-maroon-deep);
+}
+
+.public-chat-input-row > button:disabled {
+  background: var(--db-ink-soft);
+  cursor: not-allowed;
+}
+
+@media (max-width: 720px) {
+  .chat-bubble {
+    max-width: 85%;
+  }
+  .chat-bubble-reply-btn {
+    opacity: 1; /* no hover on touch devices, so always show */
+  }
+}
+.public-chat-load-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 0 auto 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--db-border);
+  background: var(--db-surface);
+  color: var(--db-ink-soft);
+  font-family: var(--db-font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.public-chat-load-more:hover:not(:disabled) { border-color: var(--db-maroon); color: var(--db-maroon); }
+.public-chat-load-more:disabled { opacity: 0.6; cursor: not-allowed; }

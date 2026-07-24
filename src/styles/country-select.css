@@ -1,0 +1,142 @@
+@import './tokens.css';
+
+/* ---- Country select with flags ---- */
+.country-select-wrap {
+  position: relative;
+  min-width: 160px;
+  margin-bottom: 22px;
+}
+
+.country-select-wrap--inline {
+  margin-bottom: 0;
+}
+
+.country-select-label {
+  display: block;
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.country-select-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-bottom: 1.5px solid var(--line);
+  background: transparent;
+  padding: 8px 2px 10px;
+  font-family: var(--body);
+  font-size: 15px;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.country-select-trigger span {
+  flex: 1;
+}
+
+.country-select-trigger:hover {
+  border-bottom-color: var(--maroon-700);
+}
+
+.country-select-trigger:focus-visible {
+  outline: 2px solid var(--maroon-700);
+  outline-offset: 2px;
+}
+
+.country-select-caret {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.country-flag {
+  width: 20px;
+  height: 15px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.country-select-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(28, 16, 19, 0.12);
+  z-index: 10;
+  overflow: hidden;
+}
+
+.country-select-search {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  padding: 10px 12px;
+  font-family: var(--body);
+  font-size: 14px;
+  color: var(--ink);
+  box-sizing: border-box;
+}
+
+.country-select-search:focus {
+  outline: none;
+  background: var(--maroon-tint);
+}
+
+.country-select-list {
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.country-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  background: transparent;
+  padding: 9px 12px;
+  font-family: var(--body);
+  font-size: 14px;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.country-option:hover {
+  background: var(--maroon-tint);
+}
+
+.country-option--selected {
+  background: var(--maroon-tint);
+  font-weight: 600;
+}
+
+.country-option--clear {
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-style: italic;
+}
+
+.country-option:focus-visible {
+  outline: 2px solid var(--maroon-700);
+  outline-offset: -2px;
+}
+
+.country-select-empty {
+  padding: 12px;
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}

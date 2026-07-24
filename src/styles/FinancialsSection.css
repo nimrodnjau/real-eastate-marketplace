@@ -1,0 +1,521 @@
+/* ==========================================================================
+   Financials section — components/dashboard/FinancialsSection.jsx
+   --------------------------------------------------------------------------
+   Fully self-contained: the only external dependency is the global --db-*
+   design tokens (colors, fonts) from the base dashboard stylesheet. Every
+   class used by this component is scoped here — nothing is borrowed from
+   Documents, Settings, Profile, or Agent Picker, so changes to those
+   sections can never accidentally affect Financials, and vice versa.
+   ========================================================================== */
+
+.financials-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.financials-block {
+  padding: 20px 22px;
+  border: 1px solid var(--db-border);
+  border-radius: 12px;
+  background: var(--db-surface);
+}
+
+.financials-block + .financials-block {
+  margin-top: 4px;
+}
+
+.financials-block-title {
+  font-family: var(--db-font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--db-ink);
+  margin: 0 0 14px;
+}
+
+.financials-block-desc {
+  font-family: var(--db-font-body);
+  font-size: 0.85rem;
+  color: var(--db-ink-soft);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.financials-empty {
+  padding: 20px 4px;
+  text-align: center;
+  font-family: var(--db-font-body);
+  font-size: 0.85rem;
+  color: var(--db-ink-soft);
+}
+
+.financials-error {
+  font-family: var(--db-font-body);
+  font-size: 0.85rem;
+  color: var(--db-brick);
+}
+
+/* ---------- Stat cards ---------- */
+
+.financials-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+}
+
+.financials-stat-card {
+  background: var(--db-surface);
+  border: 1px solid var(--db-border);
+  border-radius: 10px;
+  padding: 18px 18px 16px;
+}
+
+.financials-stat-value {
+  font-family: var(--db-font-mono);
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 2px;
+  letter-spacing: -0.01em;
+  color: var(--db-ink);
+}
+
+.financials-stat-label {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--db-ink-soft);
+}
+
+/* ---------- Escrow summary banner ---------- */
+
+.escrow-summary-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: var(--db-maroon-soft);
+  color: var(--db-maroon);
+}
+
+.escrow-summary-banner svg {
+  flex-shrink: 0;
+}
+
+.escrow-summary-amount {
+  font-family: var(--db-font-mono);
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--db-maroon-deep);
+}
+
+.escrow-summary-label {
+  font-family: var(--db-font-body);
+  font-size: 0.82rem;
+  margin: 2px 0 0;
+  color: var(--db-maroon);
+}
+
+/* ---------- Escrow table ---------- */
+
+.escrow-table {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.escrow-row {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1.3fr 1fr 1.2fr;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--db-border);
+  font-family: var(--db-font-body);
+  font-size: 0.82rem;
+  color: var(--db-ink);
+}
+
+.escrow-row--head {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--db-ink-soft);
+  border-bottom: 1px solid var(--db-border);
+}
+
+.escrow-listing-title {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.escrow-commission {
+  color: var(--db-brick);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.escrow-commission-rate {
+  font-family: var(--db-font-mono);
+  font-size: 0.68rem;
+  color: var(--db-ink-soft);
+}
+
+.escrow-net {
+  font-family: var(--db-font-mono);
+  font-weight: 600;
+  color: var(--db-sage);
+}
+
+/* ---------- Escrow status badge ---------- */
+
+.escrow-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--db-font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.escrow-status--pending {
+  background: var(--db-maroon-soft);
+  color: var(--db-maroon);
+}
+
+.escrow-status--verified {
+  background: var(--db-sage-soft);
+  color: var(--db-sage);
+}
+
+.escrow-status--rejected {
+  background: var(--db-brick-soft);
+  color: var(--db-brick);
+}
+
+/* ---------- Expandable escrow row ---------- */
+
+.escrow-row-wrap {
+  border-bottom: 1px solid var(--db-border);
+}
+
+.escrow-row-wrap .escrow-row {
+  border-bottom: none;
+}
+
+.escrow-row--clickable {
+  width: 100%;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.escrow-row--clickable:hover {
+  background: var(--db-paper);
+}
+
+.escrow-row--clickable:focus-visible {
+  outline: 2px solid var(--db-maroon);
+  outline-offset: -2px;
+}
+
+.escrow-chevron {
+  margin-left: 4px;
+  transition: transform 150ms ease;
+  color: var(--db-ink-soft);
+}
+
+.escrow-chevron--open {
+  transform: rotate(180deg);
+}
+
+.escrow-row-expanded {
+  padding: 4px 4px 18px;
+  background: var(--db-paper);
+}
+
+/* ---------- Escrow progress tracker ---------- */
+
+.escrow-tracker {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  padding: 14px 10px 6px;
+}
+
+.escrow-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  position: relative;
+}
+
+.escrow-step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 2px solid var(--db-border);
+  background: var(--db-surface);
+  z-index: 1;
+}
+
+.escrow-step--done .escrow-step-dot {
+  background: var(--db-maroon);
+  border-color: var(--db-maroon);
+}
+
+.escrow-step--current .escrow-step-dot {
+  border-color: var(--db-ink);
+  box-shadow: 0 0 0 3px var(--db-maroon-soft);
+}
+
+.escrow-step-line {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--db-border);
+  z-index: 0;
+}
+
+.escrow-step-line--done {
+  background: var(--db-maroon);
+}
+
+.escrow-step-body {
+  position: relative;
+  z-index: 1;
+}
+
+.escrow-step-label {
+  font-family: var(--db-font-body);
+  font-size: 0.72rem;
+  color: var(--db-ink-soft);
+  margin: 0;
+}
+
+.escrow-step--done .escrow-step-label,
+.escrow-step--current .escrow-step-label {
+  color: var(--db-ink);
+  font-weight: 500;
+}
+
+.escrow-step-date {
+  font-family: var(--db-font-mono);
+  font-size: 0.64rem;
+  color: var(--db-ink-soft);
+  margin: 2px 0 0;
+}
+
+.escrow-tracker--refunded {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 10px;
+  color: var(--db-brick);
+}
+
+.escrow-tracker-title {
+  font-family: var(--db-font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--db-ink);
+}
+
+.escrow-tracker-date {
+  font-family: var(--db-font-mono);
+  font-size: 0.72rem;
+  color: var(--db-ink-soft);
+  margin: 2px 0 0;
+}
+
+/* ---------- Payout account form ---------- */
+
+.payout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 560px;
+}
+
+.payout-form label {
+  display: block;
+  font-family: var(--db-font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--db-ink);
+  margin-bottom: 14px;
+}
+
+.payout-form input {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  padding: 9px 11px;
+  border: 1px solid var(--db-border);
+  border-radius: 7px;
+  font-size: 0.9rem;
+  font-family: var(--db-font-body);
+  color: var(--db-ink);
+}
+
+.payout-form input:focus {
+  outline: none;
+  border-color: var(--db-maroon);
+}
+
+.payout-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.payout-form-success {
+  font-family: var(--db-font-body);
+  font-size: 0.82rem;
+  color: var(--db-sage);
+  margin: 0 0 10px;
+}
+
+.payout-form-error {
+  font-family: var(--db-font-body);
+  font-size: 0.82rem;
+  color: var(--db-brick);
+  margin: 0 0 10px;
+}
+
+.payout-form-actions {
+  margin-top: 6px;
+}
+
+.payout-form-actions button {
+  padding: 10px 20px;
+  border-radius: 7px;
+  border: none;
+  background: var(--db-maroon);
+  color: #fff;
+  font-family: var(--db-font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.payout-form-actions button:hover:not(:disabled) {
+  background: var(--db-maroon-deep);
+}
+
+.payout-form-actions button:disabled {
+  background: var(--db-ink-soft);
+  cursor: not-allowed;
+}
+
+.payout-verified-badge,
+.payout-pending-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--db-font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+.payout-verified-badge {
+  background: var(--db-sage-soft);
+  color: var(--db-sage);
+}
+
+.payout-pending-badge {
+  background: var(--db-maroon-soft);
+  color: var(--db-maroon);
+}
+
+/* ---------- Coming soon notice ---------- */
+
+.coming-soon {
+  padding: 16px 18px;
+  border: 1.5px dashed var(--db-border);
+  border-radius: 10px;
+  background: var(--db-paper);
+}
+
+.coming-soon-title {
+  font-family: var(--db-font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--db-ink-soft);
+  margin: 0 0 4px;
+}
+
+.coming-soon-desc {
+  font-family: var(--db-font-body);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--db-ink-soft);
+  margin: 0;
+}
+
+.coming-soon code {
+  font-family: var(--db-font-mono);
+  font-size: 0.78rem;
+  background: var(--db-maroon-soft);
+  color: var(--db-maroon);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 720px) {
+  .escrow-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 12px 4px;
+  }
+  .escrow-row--head {
+    display: none;
+  }
+  .escrow-net::before {
+    content: 'You receive: ';
+    color: var(--db-ink-soft);
+    font-weight: 400;
+  }
+  .escrow-tracker {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 4px 4px;
+  }
+  .escrow-step {
+    flex-direction: row;
+    text-align: left;
+    width: 100%;
+    gap: 10px;
+  }
+  .escrow-step-line {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .payout-form-row {
+    grid-template-columns: 1fr;
+  }
+}

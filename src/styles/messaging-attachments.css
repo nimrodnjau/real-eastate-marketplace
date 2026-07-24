@@ -1,0 +1,178 @@
+/* Suggested styles for the new attachment UI — append to whichever
+   stylesheet already defines .messaging-* (input row, search modal, bubbles).
+   Adjust colors/spacing to match your existing tokens. */
+
+.messaging-attach-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.messaging-attach-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+}
+
+.messaging-attach-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.messaging-attach-menu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  background: var(--surface, #fff);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  z-index: 20;
+}
+
+.messaging-attach-menu {
+  overflow: visible;
+  width: max-content;
+}
+
+/* `all: unset` strips whatever global button style (circular, fixed
+   width/height, colored background) is being applied to every <button> in
+   this app — that's what was squashing this into a small maroon circle
+   with clipped text. We then re-declare only the layout this menu item
+   actually needs. Scoped selector + !important as a belt-and-braces
+   override in case the global rule is also using !important. */
+.messaging-attach-menu button.messaging-attach-menu-item {
+  all: unset;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  width: 100% !important;
+  height: auto !important;
+  min-width: 140px;
+  padding: 10px 14px !important;
+  border-radius: 8px !important;
+  overflow: visible !important;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.3;
+  color: #1a1a1a;
+  white-space: nowrap;
+  background: transparent !important;
+}
+
+.messaging-attach-menu button.messaging-attach-menu-item svg {
+  flex-shrink: 0;
+}
+
+.messaging-attach-menu button.messaging-attach-menu-item:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+.messaging-attach-modal-title {
+  flex: 1;
+  margin: 0;
+  font-weight: 600;
+}
+
+.messaging-attach-close {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+}
+
+.messaging-attach-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.messaging-attach-filename {
+  font-size: 13px;
+  color: var(--text-secondary, #666);
+  margin: 0;
+}
+
+.messaging-attach-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.messaging-attach-label select {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border, #ddd);
+  font-size: 14px;
+}
+
+.messaging-attach-error {
+  color: #d92d20;
+  font-size: 13px;
+  margin: 0;
+}
+
+.messaging-attach-submit {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: var(--primary, #111);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.messaging-attach-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Document card rendered inside a message bubble in place of plain text */
+.messaging-attachment-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.03);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.messaging-bubble--mine .messaging-attachment-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.messaging-attachment-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.messaging-attachment-name {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.messaging-attachment-type {
+  font-size: 12px;
+  opacity: 0.7;
+}

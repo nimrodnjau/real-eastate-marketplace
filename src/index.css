@@ -1,0 +1,43 @@
+/* Global reset + base styles. Page-specific design systems (auth, dashboard,
+   etc.) live in their own stylesheets under src/styles/ and are imported by
+   the components that use them. Brand tokens (colors, fonts) are imported
+   here so they're available everywhere, not just inside specific pages. */
+@import './styles/tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100svh;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+img,
+picture,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}

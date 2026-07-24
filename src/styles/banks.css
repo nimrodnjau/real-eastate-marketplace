@@ -1,0 +1,221 @@
+/* ==========================================================================
+   Banks / mortgage partners directory.
+   Reuses --db-* variables from dashboard.css.
+   ========================================================================== */
+
+.banks-shell {
+  min-height: 100svh;
+  background: var(--db-paper);
+  font-family: var(--db-font-body);
+  color: var(--db-ink);
+}
+
+.banks-topnav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 36px;
+  background: var(--db-surface);
+  border-bottom: 1px solid var(--db-border);
+}
+
+.banks-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--db-font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--db-maroon-deep);
+}
+
+.banks-back {
+  background: none;
+  border: 1px solid var(--db-border);
+  color: var(--db-ink);
+  border-radius: 7px;
+  padding: 7px 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.banks-back:hover {
+  background: var(--db-maroon);
+  border-color: var(--db-maroon);
+  color: #fff;
+}
+
+.banks-hero {
+  background: linear-gradient(135deg, var(--db-maroon-deep) 0%, var(--db-maroon) 100%);
+  color: #fff;
+  padding: 48px 24px;
+}
+
+.banks-hero-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.banks-hero-inner h1 {
+  font-family: var(--db-font-display);
+  font-size: 36px;
+  font-weight: 500;
+  margin: 0 0 10px;
+}
+
+.banks-hero-inner p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0;
+}
+
+.banks-list-section {
+  padding: 40px 24px 72px;
+}
+
+.banks-list-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.banks-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.banks-search {
+  flex: 1;
+  min-width: 220px;
+  padding: 10px 14px;
+  border: 1px solid var(--db-border);
+  border-radius: 8px;
+  font-size: 14px;
+  background: var(--db-surface);
+  color: var(--db-ink);
+}
+
+.banks-region-select {
+  padding: 10px 14px;
+  border: 1px solid var(--db-border);
+  border-radius: 8px;
+  font-size: 14px;
+  background: var(--db-surface);
+  color: var(--db-ink);
+  cursor: pointer;
+}
+
+.banks-empty {
+  color: var(--db-ink-soft);
+  font-size: 14.5px;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.banks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.bank-card {
+  background: var(--db-surface);
+  border: 1px solid var(--db-border);
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 12px 28px -18px rgba(42, 14, 19, 0.22);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bank-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 32px -16px rgba(42, 14, 19, 0.26);
+}
+
+.bank-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 8px;
+}
+
+.bank-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--db-maroon-soft);
+  color: var(--db-maroon-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--db-font-display);
+  font-weight: 600;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.bank-partner-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--db-maroon-deep);
+  background: var(--db-maroon-soft);
+  border-radius: 999px;
+  padding: 4px 10px;
+  text-align: right;
+}
+
+.bank-card h3 {
+  font-family: var(--db-font-display);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: var(--db-ink);
+}
+
+.bank-region {
+  font-size: 13px;
+  color: var(--db-ink-soft);
+  margin: 0 0 12px;
+}
+
+.bank-services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.bank-service-tag {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--db-ink);
+  background: var(--db-paper);
+  border: 1px solid var(--db-border);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.bank-view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--db-maroon);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 9px 16px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, gap 0.2s ease;
+}
+
+.bank-view-btn:hover {
+  background: var(--db-maroon-deep);
+  gap: 10px;
+}

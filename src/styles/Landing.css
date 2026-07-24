@@ -1,0 +1,589 @@
+/* ===== Landing page tokens =====
+   Maroon matches the existing --db-maroon marker color from ListingsMap.
+   Sand/charcoal/sage are new — grounded in red-soil + acacia tones rather
+   than a generic cream/terracotta pairing. */
+.landing-shell {
+  --lp-maroon: #7a1220;
+  --lp-maroon-deep: #4f0b15;
+  --lp-sand: #f2e9dc;
+  --lp-sand-deep: #e6d8c3;
+  --lp-ink: #1c1917;
+  --lp-ink-soft: #4a433d;
+  --lp-sage: #5c6b4f;
+  --lp-line: rgba(28, 25, 23, 0.12);
+
+  font-family: 'Suisse Intl', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--lp-ink);
+  background: #ffffff;
+}
+
+.landing-shell h1,
+.landing-shell h2,
+.landing-shell h3 {
+  font-family: 'Tiempos Headline', Georgia, 'Times New Roman', serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+/* ---- top bar ---- */
+.landing-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--lp-maroon-deep);
+  border-bottom: 1px solid rgba(242, 233, 220, 0.12);
+}
+
+.landing-topbar-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.landing-mark {
+  font-family: 'Tiempos Headline', Georgia, serif;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--lp-sand);
+}
+
+.landing-topnav {
+  display: flex;
+  gap: 28px;
+  font-size: 14px;
+}
+
+.landing-topnav a {
+  color: rgba(242, 233, 220, 0.7);
+  text-decoration: none;
+}
+
+.landing-topnav a:hover,
+.landing-topnav a:focus-visible {
+  color: var(--lp-sand);
+}
+
+.landing-topbar-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* ---- buttons ---- */
+.landing-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.landing-btn:focus-visible {
+  outline: 2px solid var(--lp-maroon);
+  outline-offset: 2px;
+}
+
+/* Default (light-background) context — hero, footer links, etc. */
+.landing-btn--solid {
+  background: var(--lp-maroon);
+  color: var(--lp-sand);
+}
+
+.landing-btn--solid:hover {
+  background: var(--lp-maroon-deep);
+}
+
+.landing-btn--ghost {
+  background: transparent;
+  color: var(--lp-ink);
+  border-color: var(--lp-line);
+}
+
+.landing-btn--ghost:hover {
+  border-color: var(--lp-ink);
+}
+
+/* Top bar sits on --lp-maroon-deep, so its buttons get their own
+   treatment: they should read as part of the bar, not separate pills
+   fighting the background. Ghost is an outline in sand; solid is a
+   quiet sand fill instead of maroon-on-maroon (which would vanish). */
+.landing-topbar-actions .landing-btn--ghost {
+  color: var(--lp-sand);
+  border-color: rgba(242, 233, 220, 0.4);
+}
+
+.landing-topbar-actions .landing-btn--ghost:hover {
+  border-color: var(--lp-sand);
+  background: rgba(242, 233, 220, 0.08);
+}
+
+.landing-topbar-actions .landing-btn--solid {
+  background: var(--lp-sand);
+  color: var(--lp-maroon-deep);
+}
+
+.landing-topbar-actions .landing-btn--solid:hover {
+  background: #ffffff;
+}
+
+/* Ghost button used directly on the hero photo (not the top bar) needs
+   the same light-on-dark treatment since the default ghost assumes a
+   light page background. */
+.landing-btn--ghost-on-photo {
+  color: var(--lp-sand);
+  border-color: rgba(242, 233, 220, 0.5);
+}
+
+.landing-btn--ghost-on-photo:hover {
+  border-color: var(--lp-sand);
+  background: rgba(242, 233, 220, 0.1);
+}
+
+.landing-btn--lg {
+  padding: 14px 28px;
+  font-size: 15px;
+}
+
+/* ---- hero ---- */
+.landing-hero {
+  position: relative;
+  padding: 96px 32px 88px;
+  overflow: hidden;
+  color: var(--lp-sand);
+  isolation: isolate;
+}
+
+/* Stack of full-bleed photo layers, one per HERO_IMAGES entry. Only the
+   active one is opacity: 1 at any time (set inline via React state) — the
+   transition below is what makes the swap read as a crossfade rather than
+   a jump cut. */
+.landing-hero-photos {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.landing-hero-photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 1.6s ease;
+  will-change: opacity;
+}
+
+/* Dark gradient sits above the photo stack, below the text, so copy stays
+   legible regardless of which photo is currently showing. */
+.landing-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(28, 25, 23, 0.55) 0%, rgba(28, 25, 23, 0.75) 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-hero-photo {
+    transition: none;
+  }
+}
+
+.landing-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.landing-eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #c9d4bd; /* lighter tint of --lp-sage, readable on the dark overlay */
+  margin: 0 0 18px;
+}
+
+.landing-hero-title {
+  font-size: clamp(34px, 5vw, 54px);
+  line-height: 1.08;
+}
+
+.landing-hero-sub {
+  margin: 24px auto 0;
+  max-width: 560px;
+  font-size: 17px;
+  line-height: 1.55;
+  color: rgb(246, 244, 241);
+}
+
+.landing-hero-search {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Radio filter row — sits above the search bar, one visible label per
+   property_type value plus 'All' and the not-yet-backed 'Rentals'. */
+.landing-search-types {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.landing-search-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-size: 13.5px;
+  color: rgba(242, 233, 220, 0.85);
+  border: 1px solid rgba(242, 233, 220, 0.35);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.landing-search-type input {
+  /* Visually hidden but still keyboard/screen-reader operable — the
+     label itself carries the selected styling below. */
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.landing-search-type:hover {
+  border-color: var(--lp-sand);
+}
+
+.landing-search-type--active {
+  background: var(--lp-sand);
+  color: var(--lp-maroon-deep);
+  border-color: var(--lp-sand);
+  font-weight: 600;
+}
+
+.landing-search-type:has(input:focus-visible) {
+  outline: 2px solid var(--lp-sand);
+  outline-offset: 2px;
+}
+
+/* Search bar + dark maroon submit button */
+.landing-search-bar {
+  display: flex;
+  width: 100%;
+  max-width: 560px;
+  background: var(--lp-sand);
+  border-radius: 3px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.landing-search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 12px 14px;
+  font-size: 15px;
+  color: var(--lp-ink);
+}
+
+.landing-search-input:focus {
+  outline: none;
+}
+
+.landing-search-input::placeholder {
+  color: var(--lp-ink-soft);
+}
+
+.landing-search-submit {
+  flex-shrink: 0;
+  background: var(--lp-maroon-deep);
+  color: var(--lp-sand);
+  border: none;
+  border-radius: 2px;
+  padding: 0 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.landing-search-submit:hover {
+  background: var(--lp-maroon);
+}
+
+.landing-search-submit:focus-visible {
+  outline: 2px solid var(--lp-sand);
+  outline-offset: 2px;
+}
+
+.landing-hero-footnote {
+  margin-top: 28px;
+  font-size: 13px;
+  color: rgba(242, 233, 220, 0.7);
+}
+
+/* ---- role strip (signature element) ---- */
+.landing-roles {
+  background: #fff;
+  padding: 88px 32px;
+  border-top: 1px solid var(--lp-line);
+  border-bottom: 1px solid var(--lp-line);
+}
+
+.landing-roles-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.landing-section-title {
+  font-size: clamp(26px, 3.4vw, 34px);
+  text-align: center;
+}
+
+.landing-section-title--light {
+  color: var(--lp-sand);
+}
+
+.landing-section-sub {
+  text-align: center;
+  max-width: 480px;
+  margin: 14px auto 48px;
+  color: var(--lp-ink-soft);
+  font-size: 15px;
+}
+
+.landing-role-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 14px;
+}
+
+.landing-role-card {
+  text-align: left;
+  background: #ffffff;
+  border: 1px solid var(--lp-line);
+  border-radius: 3px;
+  padding: 20px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.landing-role-card:hover,
+.landing-role-card:focus-visible {
+  border-color: var(--lp-maroon);
+  transform: translateY(-2px);
+}
+
+.landing-role-label {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.landing-role-desc {
+  font-size: 13px;
+  color: var(--lp-ink-soft);
+  line-height: 1.4;
+}
+
+.landing-role-arrow {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  color: var(--lp-maroon);
+}
+
+/* ---- trust section ---- */
+.landing-trust {
+  background: var(--lp-ink);
+  color: var(--lp-sand);
+  padding: 88px 32px;
+}
+
+.landing-trust-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.landing-trust-copy p {
+  margin-top: 16px;
+  color: rgba(242, 233, 220, 0.75);
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 420px;
+}
+
+.landing-trust-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.landing-trust-item {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  border-top: 1px solid rgba(242, 233, 220, 0.18);
+  padding-top: 18px;
+}
+
+.landing-trust-num {
+  font-family: 'Tiempos Headline', Georgia, serif;
+  font-size: 14px;
+  color: var(--lp-sage);
+  flex-shrink: 0;
+}
+
+.landing-trust-item p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: rgba(242, 233, 220, 0.9);
+}
+
+/* ---- professionals banners ---- */
+.landing-professionals {
+  padding: 88px 32px;
+}
+
+.landing-professionals-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.landing-pro-card {
+  padding: 40px;
+  border-radius: 3px;
+}
+
+.landing-pro-card--dark {
+  background: var(--lp-maroon);
+  color: var(--lp-sand);
+}
+
+.landing-pro-card--light {
+  background: #fff;
+  border: 1px solid var(--lp-line);
+}
+
+.landing-pro-card h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.landing-pro-card p {
+  font-size: 14.5px;
+  line-height: 1.55;
+  margin: 0 0 18px;
+  opacity: 0.9;
+}
+
+.landing-pro-link {
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  color: inherit;
+}
+
+.landing-pro-card--dark .landing-pro-link {
+  color: var(--lp-sand);
+}
+
+.landing-pro-card--light .landing-pro-link {
+  color: var(--lp-maroon);
+}
+
+/* ---- footer ---- */
+.landing-footer {
+  background: var(--lp-ink);
+  border-top: 1px solid rgba(242, 233, 220, 0.15);
+  padding: 32px;
+}
+
+.landing-footer-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.landing-mark--footer {
+  color: var(--lp-sand);
+}
+
+.landing-footer-links {
+  display: flex;
+  gap: 22px;
+}
+
+.landing-footer-links a {
+  color: rgba(242, 233, 220, 0.75);
+  font-size: 13.5px;
+  text-decoration: none;
+}
+
+.landing-footer-links a:hover {
+  color: var(--lp-sand);
+}
+
+/* ---- responsive ---- */
+@media (max-width: 720px) {
+  .landing-topnav {
+    display: none;
+  }
+  .landing-trust-inner,
+  .landing-professionals-inner {
+    grid-template-columns: 1fr;
+  }
+  .landing-hero {
+    padding: 64px 20px 56px;
+  }
+}

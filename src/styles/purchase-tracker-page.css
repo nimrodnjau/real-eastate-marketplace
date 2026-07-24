@@ -1,0 +1,91 @@
+/* Purchase tracker page */
+
+.purchase-tracker-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+  background: #ffffff;
+  color: #201a1b;
+  --maroon: #6d1220;
+  --maroon-dark: #4c0c16;
+  --maroon-tint: #f8ebec;
+}
+
+.purchase-tracker-page-state {
+  padding: 60px 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #7a7175;
+}
+
+.purchase-tracker-page-error {
+  color: #b3261e;
+}
+
+.purchase-tracker-page-back {
+  display: inline-block;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--maroon);
+  cursor: pointer;
+}
+
+.purchase-tracker-page-back:hover {
+  color: var(--maroon-dark);
+  text-decoration: underline;
+}
+
+.purchase-tracker-page-header h1 {
+  margin: 0 0 4px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #201a1b;
+}
+
+.purchase-tracker-page-address {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: #7a7175;
+}
+
+.purchase-tracker-page-price {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--maroon);
+}
+
+.purchase-tracker-page-current {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 24px 0;
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: var(--maroon-tint);
+  border: 1px solid rgba(109, 18, 32, 0.15);
+}
+
+.purchase-tracker-page-current-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8a5a60;
+}
+
+.purchase-tracker-page-current-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--maroon-dark);
+}
+
+.purchase-tracker-page-note {
+  margin: 16px 0;
+  font-size: 13.5px;
+  color: #7a7175;
+}

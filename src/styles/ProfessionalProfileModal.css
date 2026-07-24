@@ -1,0 +1,240 @@
+/* components/dashboard/ProfessionalProfileModal.jsx styles
+   Design system: dark maroon/white, Spectral (headings), Inter (body), IBM Plex Mono (mono/labels) */
+
+.prof-profile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(42, 20, 20, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 70;
+  padding: 1rem;
+}
+
+.prof-profile-modal {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: #fffaf9;
+  border-radius: 14px;
+  padding: 1.75rem;
+  box-shadow: 0 24px 60px rgba(42, 20, 20, 0.3);
+  font-family: 'Inter', sans-serif;
+}
+
+.prof-profile-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: #a08282;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 6px;
+}
+
+.prof-profile-close-btn:hover {
+  background: #fbf3f2;
+  color: #7a1f1f;
+}
+
+.prof-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.prof-profile-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f0e6e6;
+  flex-shrink: 0;
+}
+
+.prof-profile-name {
+  font-family: 'Spectral', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2a1414;
+  margin: 0;
+}
+
+.prof-profile-role {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  color: #a08282;
+  text-transform: capitalize;
+  margin: 0.2rem 0 0 0;
+}
+
+.prof-profile-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.prof-profile-stars {
+  display: inline-flex;
+  gap: 1px;
+}
+
+.prof-profile-rating-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  color: #6b5555;
+}
+
+.prof-profile-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1.1rem 0;
+  padding: 0.9rem 1rem;
+  background: #ffffff;
+  border: 1px solid #ead9d9;
+  border-radius: 10px;
+}
+
+.prof-profile-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: #4a2e2e;
+}
+
+.prof-profile-stat svg {
+  color: #a05252;
+  flex-shrink: 0;
+}
+
+.prof-profile-bio {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #4a2e2e;
+  margin: 0 0 1.1rem 0;
+}
+
+.prof-profile-section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #5c3a3a;
+  margin: 0 0 0.6rem 0;
+}
+
+.prof-profile-map-block {
+  margin-bottom: 1.1rem;
+}
+
+.prof-profile-map {
+  width: 100%;
+  height: 180px;
+  border: 1px solid #ead9d9;
+  border-radius: 10px;
+}
+
+.prof-profile-reviews-block {
+  margin-bottom: 1.25rem;
+}
+
+.prof-profile-reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.prof-profile-review-row {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.75rem;
+  background: #ffffff;
+  border: 1px solid #ead9d9;
+  border-radius: 8px;
+}
+
+.prof-profile-review-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f0e6e6;
+  flex-shrink: 0;
+}
+
+.prof-profile-review-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.prof-profile-review-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.prof-profile-review-name {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: #2a1414;
+}
+
+.prof-profile-review-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #4a2e2e;
+  margin: 0.35rem 0;
+}
+
+.prof-profile-review-date {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  color: #a08282;
+}
+
+.prof-profile-message-btn {
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #ffffff;
+  background: #7a1f1f;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.prof-profile-message-btn:hover {
+  background: #5c1717;
+}
+
+@media (max-width: 520px) {
+  .prof-profile-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .prof-profile-modal {
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: 14px 14px 0 0;
+  }
+}

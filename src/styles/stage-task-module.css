@@ -1,0 +1,314 @@
+/* Stage task module — mirrors the palette in the existing tracker page.
+   Uses CSS variables with fallbacks; if you already have tokens defined
+   elsewhere (e.g. a --color-accent / --color-surface-muted), swap the
+   fallback values below for those instead of duplicating the palette. */
+
+.stage-task-module {
+  margin-top: 1.5rem;
+  border: 1px solid #e7dcdc;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  background: #ffffff;
+}
+
+.stage-task-module-state {
+  padding: 1rem 0;
+  color: #8a8580;
+  font-size: 0.95rem;
+}
+
+.stage-task-module-error {
+  color: #a3382f;
+}
+
+.stage-task-module-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 0.75rem;
+}
+
+.stage-task-module-progress {
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  color: #8a8580;
+  font-variant-numeric: tabular-nums;
+}
+
+.stage-task-module-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.stage-task-module-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.stage-task-module-checkbox {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 6px;
+  border: 1.5px solid #c9b8ba;
+  background: #fff;
+  color: #7c2e3a;
+  font-size: 0.9rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.stage-task-module-checkbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.stage-task-module-item.is-done .stage-task-module-checkbox {
+  background: #7c2e3a;
+  border-color: #7c2e3a;
+  color: #fff;
+}
+
+.stage-task-module-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.stage-task-module-item-label {
+  font-weight: 600;
+  color: #2b2320;
+}
+
+.stage-task-module-item.is-done .stage-task-module-item-label {
+  color: #8a8580;
+  text-decoration: line-through;
+  text-decoration-color: #c9b8ba;
+}
+
+.stage-task-module-item-description {
+  font-size: 0.85rem;
+  color: #8a8580;
+}
+
+.stage-task-module-item-waiting {
+  font-size: 0.75rem;
+  color: #a9836a;
+  font-style: italic;
+}
+
+.stage-task-module-item.is-readonly .stage-task-module-item-label {
+  color: #6b6560;
+}
+
+.stage-task-module-advanced {
+  margin: 1rem 0 0;
+  padding: 0.6rem 0.85rem;
+  background: #f5e9e9;
+  border-radius: 8px;
+  color: #7c2e3a;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Tasks that render a full mini-module instead of a checkbox */
+
+.stage-task-module-item.has-custom-module {
+  flex-direction: column;
+}
+
+.stage-task-module-item-text-full {
+  width: 100%;
+}
+
+.provider-task {
+  margin-top: 0.6rem;
+  padding: 0.85rem;
+  border: 1px solid #eee0e0;
+  border-radius: 10px;
+  background: #fbf7f6;
+}
+
+.provider-task-title,
+.provider-task-subtitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2b2320;
+  margin: 0 0 0.5rem;
+}
+
+.provider-task-state {
+  font-size: 0.85rem;
+  color: #8a8580;
+}
+
+.provider-task-error {
+  font-size: 0.8rem;
+  color: #a3382f;
+  margin-top: 0.4rem;
+}
+
+.provider-task-done {
+  font-size: 0.9rem;
+  color: #2b2320;
+}
+
+.provider-task-waiting {
+  font-size: 0.85rem;
+  color: #8a8580;
+  font-style: italic;
+}
+
+.provider-task-pending {
+  color: #a9836a;
+}
+
+.provider-task-confirmed {
+  color: #3c7a4f;
+  font-weight: 600;
+}
+
+.provider-task-declined {
+  color: #a3382f;
+}
+
+.provider-task-confirm {
+  margin-top: 0.75rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #7c2e3a;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.provider-task-confirm:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Provider directory */
+
+.provider-directory-list {
+  list-style: none;
+  margin: 0 0 0.5rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.provider-directory-state {
+  font-size: 0.85rem;
+  color: #8a8580;
+}
+
+.provider-directory-error {
+  color: #a3382f;
+}
+
+.provider-directory-card-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  border: 1.5px solid #e7dcdc;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.provider-directory-card.is-selected .provider-directory-card-button {
+  border-color: #7c2e3a;
+  background: #f9f0f0;
+}
+
+.provider-directory-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.provider-directory-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  flex: 1;
+}
+
+.provider-directory-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: #2b2320;
+}
+
+.provider-directory-bio {
+  font-size: 0.78rem;
+  color: #8a8580;
+}
+
+.provider-directory-rating {
+  font-size: 0.75rem;
+  color: #a9836a;
+}
+
+.provider-directory-check {
+  color: #7c2e3a;
+  font-weight: 700;
+}
+
+/* Slot picker */
+
+.provider-task-slots {
+  margin-top: 0.75rem;
+}
+
+.provider-task-day {
+  margin-bottom: 0.6rem;
+}
+
+.provider-task-day-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #8a8580;
+  margin-bottom: 0.3rem;
+}
+
+.provider-task-day-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.provider-task-slot-button {
+  padding: 0.35rem 0.65rem;
+  border: 1.5px solid #e7dcdc;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.provider-task-slot-button.is-selected {
+  border-color: #7c2e3a;
+  background: #7c2e3a;
+  color: #fff;
+}

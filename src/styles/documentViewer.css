@@ -1,0 +1,169 @@
+.doc-viewer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(20, 6, 10, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.doc-viewer-modal {
+  width: min(900px, 100%);
+  height: min(90vh, 1100px);
+  background: #ffffff;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.doc-viewer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #4a0f1c; /* dark maroon */
+  color: #fff;
+  font-family: 'Spectral', serif;
+}
+
+.doc-viewer-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.05rem;
+}
+
+.doc-viewer-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.doc-viewer-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.doc-viewer-controls button {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.doc-viewer-controls button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.doc-viewer-controls button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.doc-viewer-close {
+  margin-left: 6px;
+}
+
+.doc-viewer-page-count {
+  font-size: 0.8rem;
+  min-width: 48px;
+  text-align: center;
+}
+
+.doc-viewer-body {
+  flex: 1;
+  overflow: auto;
+  background: #f4ecec;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+}
+
+.doc-viewer-status {
+  font-family: 'Inter', sans-serif;
+  color: #6b4a4f;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.doc-viewer-error {
+  color: #7a1f2b;
+}
+
+.doc-viewer-canvas-wrap {
+  position: relative;
+  display: inline-block;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.doc-viewer-canvas-wrap.doc-viewer-blurred .doc-viewer-canvas {
+  filter: blur(18px);
+  transition: filter 0.15s ease;
+}
+
+.doc-viewer-canvas {
+  display: block;
+  max-width: 100%;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+  pointer-events: none; /* blocks drag-to-save on the rendered bitmap */
+}
+
+.doc-viewer-watermark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-around;
+  justify-content: space-around;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.doc-viewer-watermark span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  color: rgba(74, 15, 28, 0.16);
+  transform: rotate(-28deg);
+  white-space: nowrap;
+}
+
+.doc-viewer-footer {
+  padding: 10px 20px;
+  background: #fff;
+  border-top: 1px solid #eee;
+}
+
+.doc-viewer-footer p {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  color: #8a7175;
+}
+
+/* Best-effort: blank the modal if the user tries to print it.
+   Trivially bypassable (screenshot the render, disable CSS via
+   devtools, etc.) — this is a nuisance deterrent, not security. */
+@media print {
+  .doc-viewer-overlay {
+    display: none !important;
+  }
+}

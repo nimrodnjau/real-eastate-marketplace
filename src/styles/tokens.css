@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap');
+
+/* Brand tokens — available globally so any component (auth, dashboard,
+   listings, etc.) can use them without needing a specific parent wrapper. */
+:root {
+  --maroon-900: #4a0f1d;
+  --maroon-700: #7a1e33;
+  --maroon-tint: #f8eef0;
+  --ink: #1c1013;
+  --paper: #ffffff;
+  --line: #e7dcdd;
+  --muted: #6b5a5e;
+  --display: 'Fraunces', Georgia, serif;
+  --body: 'Work Sans', system-ui, sans-serif;
+}

@@ -1,0 +1,131 @@
+/* SubmitListingModal.css
+   Styles the "how do you want to list this property" modal
+   (choose agent vs. direct listing). Classes prefixed sbl- to
+   avoid any collision with other modal stylesheets. */
+
+.sbl-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.sbl-modal {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  padding: 28px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.sbl-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+}
+
+.sbl-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  padding-right: 24px;
+}
+
+.sbl-subtitle {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 20px;
+}
+
+.sbl-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sbl-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  text-align: left;
+  padding: 16px;
+  border: 2px solid #e4e4e4;
+  border-radius: 10px;
+  background: #fafafa;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.sbl-option:hover {
+  border-color: #c9b3b6;
+}
+
+.sbl-option--selected {
+  border-color: #5c1420;
+  background: #fdf4f5;
+}
+
+.sbl-option-icon {
+  color: #5c1420;
+}
+
+.sbl-option-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.sbl-option-desc {
+  font-size: 12.5px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.sbl-error {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #b3261e;
+}
+
+.sbl-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.sbl-cancel {
+  padding: 9px 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sbl-confirm {
+  padding: 9px 18px;
+  border-radius: 8px;
+  border: none;
+  background: #5c1420;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sbl-confirm:disabled {
+  background: #c9b3b6;
+  cursor: not-allowed;
+}

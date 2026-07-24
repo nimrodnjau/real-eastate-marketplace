@@ -1,0 +1,149 @@
+/* components/dashboard/ProfileSection.jsx styles
+   Design system: dark maroon/white, Spectral (headings), Inter (body), IBM Plex Mono (mono/labels)
+   Shares .profile-form / .profile-form-actions / .profile-form-success / .profile-form-error /
+   .settings-block-title conventions with SettingsSection.css — keep both in sync if you tweak the palette. */
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  max-width: 640px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Form */
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.profile-form-row {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.profile-form-row > label {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #5c3a3a;
+}
+
+.profile-form-optional {
+  text-transform: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0;
+  color: #a08282;
+}
+
+.profile-form input {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: #2a1414;
+  background: #fffaf9;
+  border: 1px solid #d9c2c2;
+  border-radius: 6px;
+  padding: 0.65rem 0.8rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.profile-form input:focus {
+  border-color: #7a1f1f;
+  box-shadow: 0 0 0 3px rgba(122, 31, 31, 0.12);
+}
+
+.profile-form input:disabled {
+  background: #f3ebea;
+  color: #8a7373;
+  cursor: not-allowed;
+}
+
+.profile-form-hint {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  color: #a08282;
+  margin: -0.6rem 0 0 0;
+}
+
+.profile-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.25rem;
+}
+
+.profile-form-actions button {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #ffffff;
+  background: #7a1f1f;
+  border: none;
+  border-radius: 6px;
+  padding: 0.65rem 1.4rem;
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.profile-form-actions button:hover:not(:disabled) {
+  background: #5c1717;
+}
+
+.profile-form-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.profile-form-success {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: #1e7a3c;
+  margin: 0;
+}
+
+.profile-form-error {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: #b23a3a;
+  margin: 0;
+}
+
+/* Divider between profile form and password block */
+
+.profile-section-divider {
+  height: 1px;
+  background: #ead9d9;
+  margin: 2rem 0;
+}
+
+/* Password block */
+
+.profile-password-block .settings-block-title {
+  font-family: 'Spectral', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #4a0e0e;
+  margin: 0 0 1.25rem 0;
+}
+
+/* Narrow viewports: stack row fields */
+
+@media (max-width: 520px) {
+  .profile-form-row {
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+}
