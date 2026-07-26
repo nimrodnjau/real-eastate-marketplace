@@ -18,6 +18,8 @@ import PublicChatPage from './pages/PublicChatPage';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import { AdminRoute } from './components/AdminRoute';
+import MessagesSection from './components/dashboard/MessagesSection'; // Add this import
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -47,6 +49,17 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* ADD THE MESSAGES ROUTE HERE - inside protected routes */}
+          <Route
+            path="/dashboard/messages"
+            element={
+              <ProtectedRoute>
+                <MessagesSection />
+              </ProtectedRoute>
+            }
+          />
+          
               <Route
                 path="/listings"
                 element={
