@@ -1,5 +1,6 @@
 // components/dashboard/MessagesSection.jsx
 import { useState, useEffect, useCallback, useRef, useLayoutEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Search, Send, MessageSquarePlus, ArrowLeft, Check, CheckCheck, Plus, FileText, X } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../context/AuthContext';
@@ -57,6 +58,8 @@ function previewTextFor(message) {
 export default function MessagesSection() {
   const { profile } = useAuth();
 
+  const location = useLocation(); 
+
   const cachedConversations = profile?.id ? getCachedConversations(profile.id) : null;
   const [conversations, setConversations] = useState(cachedConversations || []);
   const [loadingConversations, setLoadingConversations] = useState(!cachedConversations);
@@ -98,6 +101,10 @@ export default function MessagesSection() {
   const channelRef = useRef(null); // per-open-conversation channel (messages + typing)
   const lastTypingSentAtRef = useRef(0);
   const typingHideTimeoutRef = useRef(null);
+
+
+  // Handle navigation state for starting a conversation
+  
 
   // Kept in sync with activeConversation so the *global* subscription below
   // (which only sets up once, not on every conversation switch) can always
@@ -241,6 +248,136 @@ export default function MessagesSection() {
     setLoadingOlder(false);
   }, [activeConversation?.id, loadingOlder, hasMoreOlder, messages]);
 
+
+  useEffect(() => {
+    const startWithId = location.state?.startConversationWith;
+    const listingId = location.state?.listingId;
+
+    if (startWithId && profile?.id && startWithId !== profile.id) {
+      // Find or create conversation with this user
+      startConversationWithUser(startWithId, listingId);
+      // Clear the state to prevent re-running
+      window.history.replaceState({}, document.title);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile?.id, location.state]);
+
+
+
+   // Add this new function to start a conversation with a specific user
+const startConversationWithUser = useCallback(async (otherUserId, listingId = null) => {
+  if (!profile?.id || otherUserId === profile.id) return;
+
+  const [a, b] = [profile.id, otherUserId].sort();
+
+  try {
+    // First, check if conversation exists more thoroughly
+    let query = supabase
+      .schema('marketplace')
+      .from('conversations')
+      .select('id, participant_one, participant_two')
+      .eq('participant_one', a)
+      .eq('participant_two', b);
+
+    if (listingId) {
+      query = query.eq('listing_id', listingId);
+    }
+
+    const { data: existing, error: findError } = await query.maybeSingle();
+
+    if (findError && findError.code !== 'PGRST116') { // PGRST116 = not found
+      console.error('Error finding conversation:', findError);
+      return;
+    }
+
+    let conversationId = existing?.id;
+
+    // If no conversation exists, try to create one
+    if (!conversationId) {
+      try {
+        const { data: created, error: createError } = await supabase
+          .schema('marketplace')
+          .from('conversations')
+          .insert({ 
+            participant_one: a, 
+            participant_two: b,
+            listing_id: listingId || null 
+          })
+          .select('id')
+          .single();
+
+        if (createError) {
+          // If it's a duplicate error (409), try to fetch the existing one again
+          if (createError.code === '23505' || createError.status === 409) {
+            console.log('Conversation already exists, fetching it...');
+            const { data: retryExisting } = await supabase
+              .schema('marketplace')
+              .from('conversations')
+              .select('id')
+              .eq('participant_one', a)
+              .eq('participant_two', b)
+              .maybeSingle();
+            
+            if (retryExisting) {
+              conversationId = retryExisting.id;
+            } else {
+              console.error('Failed to find existing conversation after duplicate error');
+              return;
+            }
+          } else {
+            console.error('Failed to create conversation:', createError);
+            return;
+          }
+        } else {
+          conversationId = created.id;
+        }
+      } catch (err) {
+        console.error('Error in conversation creation:', err);
+        return;
+      }
+    }
+
+    if (!conversationId) {
+      console.error('No conversation ID available');
+      return;
+    }
+
+    // Fetch the other user's profile
+    const { data: otherUser, error: profileError } = await supabase
+      .schema('marketplace')
+      .from('profiles')
+      .select('id, full_name, avatar_url, role, agency_name')
+      .eq('id', otherUserId)
+      .single();
+
+    if (profileError) {
+      console.error('Failed to fetch user profile:', profileError);
+      // Still set the conversation even if we can't get the profile
+      setActiveConversation({ 
+        id: conversationId, 
+        otherUser: { id: otherUserId, full_name: 'User' },
+        listingId: listingId || null
+      });
+    } else {
+      setActiveConversation({ 
+        id: conversationId, 
+        otherUser: otherUser,
+        listingId: listingId || null
+      });
+    }
+
+    // Refresh the conversations list
+    await fetchConversations();
+    
+  } catch (error) {
+    console.error('Unexpected error in startConversationWithUser:', error);
+  }
+}, [profile?.id, fetchConversations]);
+
+
+
+
+
   useEffect(() => {
     if (!isPrependingRef.current) return;
     const container = messagesContainerRef.current;
@@ -298,6 +435,8 @@ export default function MessagesSection() {
 
     prevRectTopsRef.current = new Map();
   }, [conversations]);
+
+
 
   // Per-open-conversation channel: live message updates + typing broadcast
   // for whichever chat is currently on screen.
@@ -436,6 +575,7 @@ export default function MessagesSection() {
         if (!error) setListingOptions(data || []);
       });
   }, [documentModalOpen, activeConversation, profile?.role, profile?.id]);
+
 
   function handleDraftChange(value) {
     setDraft(value);
