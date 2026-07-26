@@ -1,0 +1,445 @@
+@import url("https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
+/* ---------------------------------------------------------
+   Listings — property cards styled like registry record
+   cards: a filing tag in the corner (registry index number)
+   and the status rendered as an ink stamp rather than a
+   pill, since this platform's whole job is verifying and
+   filing property records. Same maroon/white ledger palette
+   as AdminOverview.css / AdminApprovals.css — :root and the
+   shared .section-heading / .empty-note / .filter-row /
+   .filter-chip rules are redeclared here too so this file
+   stays self-sufficient on its own.
+--------------------------------------------------------- */
+
+:root {
+  --maroon-900: #3f0f1c;
+  --maroon-700: #5c1626;
+  --maroon-50: #faf5f4;
+  --ink: #211613;
+  --ink-soft: #7a6b67;
+  --ink-faint: #a89c98;
+  --line: #e8e0dd;
+  --line-strong: #d8cdc9;
+  --danger: #7d2036;
+  --danger-bg: #f4e9ec;
+  --shadow-rgb: 63, 15, 28;
+
+  /* Listings-specific stamp accents — not needed by the other
+     admin views, so scoped to this file rather than the shared root. */
+  --stamp-green: #2f5233;
+  --stamp-gold: #96661c;
+
+  --font-display: "Spectral", Georgia, serif;
+  --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --radius: 3px;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.4rem;
+  color: #faf3f1;
+  background: var(--maroon-900);
+  margin: 0 0 28px;
+  padding: 18px 24px;
+  border-radius: var(--radius);
+  letter-spacing: 0.01em;
+}
+
+.empty-note {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  padding: 20px 18px;
+}
+
+/* ---------------------------------------------------------
+   Controls: search + sort + status filter row
+--------------------------------------------------------- */
+
+.listing-controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.listing-search {
+  flex: 1;
+  min-width: 220px;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+}
+
+.listing-search:focus-visible {
+  outline: 2px solid var(--maroon-900);
+  outline-offset: 1px;
+}
+
+.listing-sort {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.filter-chip {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 7px 16px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.filter-chip:hover {
+  border-color: var(--maroon-900);
+  color: var(--maroon-900);
+}
+
+.filter-chip.is-active {
+  background: var(--maroon-900);
+  border-color: var(--maroon-900);
+  color: #fff;
+}
+
+.listing-loading,
+.listing-error {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  padding: 16px 18px;
+}
+
+.listing-loading {
+  color: var(--ink-soft);
+}
+
+.listing-error {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-radius: var(--radius);
+}
+
+/* ---------------------------------------------------------
+   Grid + card
+--------------------------------------------------------- */
+
+.listing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.listing-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.listing-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--maroon-900);
+  box-shadow: 0 10px 24px rgba(var(--shadow-rgb), 0.14);
+}
+
+/* --- media / cover photo --- */
+
+.listing-card-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--maroon-50);
+}
+
+.listing-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.listing-card-media-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--ink-faint);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+}
+
+/* Filing tag — registry index number, top-left corner of the photo */
+.listing-card-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  color: #fff;
+  background: rgba(33, 22, 19, 0.62);
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+
+.listing-card-photocount {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: #fff;
+  background: rgba(33, 22, 19, 0.62);
+  padding: 2px 7px;
+  border-radius: 2px;
+}
+
+/* Status stamp — the one deliberate flourish on the card: an ink-stamp
+   treatment (double ring, rotated, uppercase serif-adjacent tracking)
+   standing in for the pill badges used elsewhere, because this whole
+   product is about certifying and filing property records. */
+.listing-card-stamp {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: 2px;
+  border: 1.5px solid currentColor;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3px currentColor;
+  transform: rotate(-6deg);
+  background: #fff;
+}
+
+.stamp-draft {
+  color: var(--ink-faint);
+  border-style: dashed;
+}
+
+.stamp-pending {
+  color: var(--stamp-gold);
+}
+
+.stamp-active {
+  color: var(--stamp-green);
+}
+
+.stamp-offer {
+  color: var(--maroon-900);
+}
+
+.stamp-sold {
+  color: var(--ink);
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--ink);
+}
+
+.stamp-rejected {
+  color: var(--danger);
+}
+
+/* --- body --- */
+
+.listing-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 18px 18px;
+}
+
+.listing-card-toprow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.listing-card-type {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-faint);
+}
+
+.listing-card-price {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--maroon-900);
+  white-space: nowrap;
+}
+
+.listing-card-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  line-height: 1.3;
+}
+
+.listing-card-location {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.listing-card-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.listing-card-fact {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  color: var(--ink);
+}
+
+.listing-card-rejection {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-radius: 2px;
+  padding: 8px 10px;
+  margin: 0;
+}
+
+/* --- activity strip --- */
+
+.listing-card-activity {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  margin-top: 2px;
+}
+
+.listing-card-activity-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+}
+
+.listing-card-activity-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 6px;
+}
+
+.listing-card-stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.listing-card-stat svg {
+  color: var(--maroon-900);
+}
+
+/* --- footer --- */
+
+.listing-card-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  margin-top: 2px;
+}
+
+.listing-card-contact {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.listing-card-contact-name {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.listing-card-contact-sub {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+}
+
+.listing-card-posted {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------
+   Responsive
+--------------------------------------------------------- */
+
+@media (max-width: 480px) {
+  .listing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-heading {
+    padding: 16px 18px;
+    font-size: 1.25rem;
+  }
+}

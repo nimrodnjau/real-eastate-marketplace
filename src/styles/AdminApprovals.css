@@ -1,0 +1,272 @@
+@import url("https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
+/* ---------------------------------------------------------
+   Approvals — filter row, ledger of pending items, actions
+   Same maroon/white ledger palette as AdminOverview.css —
+   :root, .section-heading and .empty-note are redeclared
+   here too so this file is self-sufficient on its own.
+--------------------------------------------------------- */
+
+:root {
+  --maroon-900: #3f0f1c;
+  --maroon-700: #5c1626;
+  --maroon-50: #faf5f4;
+  --ink: #211613;
+  --ink-soft: #7a6b67;
+  --ink-faint: #a89c98;
+  --line: #e8e0dd;
+  --line-strong: #d8cdc9;
+  --danger: #7d2036;
+  --danger-bg: #f4e9ec;
+  --shadow-rgb: 63, 15, 28;
+
+  --font-display: "Spectral", Georgia, serif;
+  --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --radius: 3px;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.4rem;
+  color: #faf3f1;
+  background: var(--maroon-900);
+  margin: 0 0 28px;
+  padding: 18px 24px;
+  border-radius: var(--radius);
+  letter-spacing: 0.01em;
+}
+
+.empty-note {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  padding: 20px 18px;
+}
+
+/* ---------------------------------------------------------
+   Filter row
+--------------------------------------------------------- */
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.filter-chip {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 7px 16px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.filter-chip:hover {
+  border-color: var(--maroon-900);
+  color: var(--maroon-900);
+}
+
+.filter-chip:focus-visible {
+  outline: 2px solid var(--maroon-900);
+  outline-offset: 2px;
+}
+
+.filter-chip.is-active {
+  background: var(--maroon-900);
+  border-color: var(--maroon-900);
+  color: #fff;
+}
+
+/* ---------------------------------------------------------
+   Ledger — one bordered card, each pending item a record row
+--------------------------------------------------------- */
+
+.ledger {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+}
+
+.ledger-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  border-left: 2px solid transparent;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.ledger-row:last-child {
+  border-bottom: none;
+}
+
+.ledger-row:hover {
+  background: var(--maroon-50);
+  border-left-color: var(--maroon-900);
+}
+
+.ledger-main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ledger-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ledger-type {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* Agent/Seller/Landlord are person-verification types, so they
+   share the maroon family at different strengths; Listing is a
+   property, not a person, so it gets the neutral ink badge —
+   color groups the four types by what they actually are. */
+.type-agent {
+  background: var(--maroon-900);
+  color: #fff;
+}
+
+.type-seller {
+  background: var(--maroon-700);
+  color: #fff;
+}
+
+.type-landlord {
+  background: #fff;
+  color: var(--maroon-900);
+  border: 1px solid var(--maroon-900);
+}
+
+.type-listing {
+  background: var(--ink);
+  color: #fff;
+}
+
+.ledger-name {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.ledger-detail {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.ledger-detail a {
+  color: var(--maroon-900);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.ledger-detail a:hover {
+  border-bottom-color: var(--maroon-900);
+}
+
+.ledger-time {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+}
+
+.ledger-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------
+   Buttons
+--------------------------------------------------------- */
+
+.btn {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--maroon-900);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: var(--maroon-900);
+  border-color: var(--maroon-900);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--maroon-700);
+  border-color: var(--maroon-700);
+}
+
+.btn-secondary {
+  background: #fff;
+  border-color: var(--line-strong);
+  color: var(--ink-soft);
+}
+
+.btn-secondary:hover {
+  border-color: var(--ink-soft);
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------
+   Responsive
+--------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  .ledger-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ledger-actions {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-heading {
+    padding: 16px 18px;
+    font-size: 1.25rem;
+  }
+
+  .ledger-actions .btn {
+    flex: 1;
+  }
+}

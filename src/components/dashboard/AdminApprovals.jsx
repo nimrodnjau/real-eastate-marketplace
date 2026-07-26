@@ -1,8 +1,21 @@
 import React, { useState, useMemo } from "react";
+import "../../styles/AdminApprovals.css";
 
+const APPROVAL_TYPES = ["All", "Agent", "Seller", "Listing", "Landlord"];
+
+/**
+ * AdminApprovals — pending-item ledger with type filter + approve/reject actions.
+ *
+ * Pure presentational component: all data loading and the approve/reject
+ * mutation live in AdminDashboard's loadQueue/handleDecide. This component
+ * just renders `queue` and calls `onDecide(id, "approved" | "rejected")`.
+ *
+ * Expected shape of each item in `queue` (see AdminDashboard's loadQueue):
+ *   { id, type, name, detail, submitted, documentUrl }
+ */
 export default function AdminApprovals({ queue, onDecide }) {
   const [filter, setFilter] = useState("All");
-  const types = ["All", "Agent", "Seller", "Listing", "Landlord"];
+
   const filtered = useMemo(
     () => (filter === "All" ? queue : queue.filter((q) => q.type === filter)),
     [queue, filter]
@@ -12,7 +25,7 @@ export default function AdminApprovals({ queue, onDecide }) {
     <div>
       <h2 className="section-heading">Approval queue</h2>
       <div className="filter-row">
-        {types.map((t) => (
+        {APPROVAL_TYPES.map((t) => (
           <button
             key={t}
             onClick={() => setFilter(t)}
@@ -40,6 +53,15 @@ export default function AdminApprovals({ queue, onDecide }) {
                 </div>
                 <span className="ledger-detail">
                   {item.detail} · {item.submitted}
+                  {item.documentUrl && (
+                    <>
+                      {" "}
+                      ·{" "}
+                      <a href={item.documentUrl} target="_blank" rel="noreferrer">
+                        view document
+                      </a>
+                    </>
+                  )}
                 </span>
               </div>
               <div className="ledger-actions">

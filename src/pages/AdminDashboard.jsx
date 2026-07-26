@@ -5,6 +5,9 @@ import { timeAgo } from "../utils/timeAgo";
 import Overview from "../components/dashboard/AdminOverview";
 import "../styles/AdminDashboard.css";
 import AdminApprovals from "../components/dashboard/AdminApprovals";
+import AdminListings from "../components/dashboard/AdminListings";
+import AdminUsers from "../components/dashboard/AdminUsers";
+import AdminTransactions from "../components/dashboard/AdminTransactions";
 
 // All our tables live in the `marketplace` Postgres schema, not the
 // default `public` one — every query needs to go through this.
@@ -23,9 +26,23 @@ const mp = () => supabase.schema("marketplace");
  *    `idField` / `statusField` in that entry's config below — loadQueue
  *    and handleDecide both read from the config instead of assuming
  *    `id`/`status` everywhere.
+ *  - agent_profiles / seller_profiles / landlord_profiles each carry
+ *    TWO foreign keys into `profiles`: one via `user_id` (the person
+ *    being reviewed) and one via `verified_by` (the admin who reviewed
+ *    them). PostgREST can't infer which one `profiles(full_name)` means
+ *    when both exist, and errors with "more than one relationship was
+ *    found". Fix is to pin the embed to the FK explicitly with
+ *    `profiles!user_id(full_name)`.
  *  - Route this behind /admin, gated by a check against `marketplace.admin_users`
  *    (see AdminRoute + AdminLogin).
  *  - Every approve/reject also inserts a row into `admin_actions` for audit.
+ *  - Postgres enum reference (marketplace schema), confirmed via
+ *    pg_enum — use these exact labels, nothing else is valid:
+ *      verification_status: unverified | pending | verified | rejected
+ *      listing_status: draft | pending_review | active | under_offer |
+ *                       sold | rejected | pending_agent_review
+ *      escrow_status: pending | held | released | refunded
+ *        ("in progress" == held: funds captured, deal not yet closed)
  */
 
 const PENDING_QUERIES = [
@@ -39,8 +56,11 @@ const PENDING_QUERIES = [
     // verification_status is an enum: unverified | pending | verified | rejected —
     // approve must write "verified", there's no "approved" label.
     approvedValue: "verified",
+    // profiles!user_id(...) pins the embed to the user_id FK — agent_profiles
+    // also has a verified_by FK into profiles, so the unqualified
+    // "profiles(full_name)" form is ambiguous and PostgREST rejects it.
     select:
-      "user_id, agency_name, bio, location_lat, location_lng, gazette_proof_url, verification_status, created_at, profiles(full_name)",
+      "user_id, agency_name, bio, location_lat, location_lng, gazette_proof_url, verification_status, created_at, profiles!user_id(full_name)",
     // Prefer the real person's name (joined from profiles); fall back to
     // the agency name if the join comes back empty for any reason.
     getName: (row) => row.profiles?.full_name ?? row.agency_name ?? "Unnamed agent",
@@ -65,7 +85,10 @@ const PENDING_QUERIES = [
     statusField: "verification_status",
     // Same enum as Agent: unverified | pending | verified | rejected.
     approvedValue: "verified",
-    select: "user_id, id_doc_url, verification_status, verified_by, verified_at, created_at, profiles(full_name)",
+    // profiles!user_id(...) — same ambiguity as agent_profiles above,
+    // this table also has a verified_by FK into profiles.
+    select:
+      "user_id, id_doc_url, verification_status, verified_by, verified_at, created_at, profiles!user_id(full_name)",
     getName: (row) => row.profiles?.full_name ?? "Unnamed seller",
     detailFn: (row) =>
       row.verified_by
@@ -80,7 +103,9 @@ const PENDING_QUERIES = [
     // it wasn't included in the information_schema check.
     idField: "user_id",
     statusField: "verification_status",
-    select: "user_id, id_doc_url, verification_status, verified_by, verified_at, created_at, profiles(full_name)",
+    // profiles!user_id(...) — same fix as agent_profiles/seller_profiles.
+    select:
+      "user_id, id_doc_url, verification_status, verified_by, verified_at, created_at, profiles!user_id(full_name)",
     getName: (row) => row.profiles?.full_name ?? "Unnamed landlord",
     detailFn: (row) =>
       row.verified_by
@@ -258,8 +283,16 @@ export default function AdminDashboard() {
     const sevenDaysAgo = new Date(Date.now() - 7 * 86400000).toISOString();
     const [signupsRes, listingsRes, escrowRes] = await Promise.all([
       mp().from("profiles").select("id", { count: "exact", head: true }).gte("created_at", sevenDaysAgo),
-      mp().from("listings").select("id", { count: "exact", head: true }).eq("status", "live"),
-      mp().from("escrow_transactions").select("id", { count: "exact", head: true }).eq("status", "in_progress"),
+      // listing_status enum: draft | pending_review | active | under_offer |
+      // sold | rejected | pending_agent_review — "active" matches the
+      // approvedValue used for the Listing entry in PENDING_QUERIES above.
+      mp().from("listings").select("id", { count: "exact", head: true }).eq("status", "active"),
+      // escrow_status enum: pending | held | released | refunded — no
+      // "in_progress" label exists. "held" is the closest match for
+      // "escrow in progress" (funds captured, deal not yet closed).
+      // If "in progress" should also include not-yet-funded escrows,
+      // switch this to .in("status", ["pending", "held"]).
+      mp().from("escrow_transactions").select("id", { count: "exact", head: true }).eq("status", "held"),
     ]);
 
     [
@@ -382,9 +415,9 @@ export default function AdminDashboard() {
         {loading && <div className="office-loading">Loading…</div>}
         {active === "overview" && <Overview stats={stats} feed={feed} errors={loadErrors} />}
         {active === "approvals" && <ApprovalsView queue={queue} onDecide={handleDecide} />}
-        {active === "listings" && <PlaceholderView title="Listings" />}
-        {active === "users" && <PlaceholderView title="Users" />}
-        {active === "transactions" && <PlaceholderView title="Transactions" />}
+        {active === "listings" && <AdminListings />}
+        {active === "users" && <AdminUsers />}
+        {active === "transactions" && <AdminTransactions />}
 
         {toast && <div className="office-toast">{toast}</div>}
       </div>

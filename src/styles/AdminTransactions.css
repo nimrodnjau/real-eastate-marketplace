@@ -1,0 +1,398 @@
+@import url("https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
+/* ---------------------------------------------------------
+   Transactions — money ledger (escrow deposits, commission,
+   payouts) + a detail drawer. Same maroon/white ledger palette
+   as the other admin views — :root and the shared
+   .section-heading / .empty-note / .filter-chip rules are
+   redeclared here too, same self-sufficient-file convention
+   as AdminUsers.css.
+--------------------------------------------------------- */
+
+:root {
+  --maroon-900: #3f0f1c;
+  --maroon-700: #5c1626;
+  --maroon-50: #faf5f4;
+  --ink: #211613;
+  --ink-soft: #7a6b67;
+  --ink-faint: #a89c98;
+  --line: #e8e0dd;
+  --line-strong: #d8cdc9;
+  --danger: #7d2036;
+  --danger-bg: #f4e9ec;
+  --shadow-rgb: 63, 15, 28;
+
+  --good: #2f6d47;
+  --good-bg: #eaf3ec;
+  --amber: #9a6a12;
+  --amber-bg: #fbf1de;
+
+  --font-display: "Spectral", Georgia, serif;
+  --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --radius: 3px;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.4rem;
+  color: #faf3f1;
+  background: var(--maroon-900);
+  margin: 0 0 28px;
+  padding: 18px 24px;
+  border-radius: var(--radius);
+  letter-spacing: 0.01em;
+}
+
+.empty-note {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  padding: 20px 18px;
+}
+
+.filter-chip {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 7px 16px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.filter-chip:hover {
+  border-color: var(--maroon-900);
+  color: var(--maroon-900);
+}
+
+.filter-chip.is-active {
+  background: var(--maroon-900);
+  border-color: var(--maroon-900);
+  color: #fff;
+}
+
+/* ---------------------------------------------------------
+   Stat cards
+--------------------------------------------------------- */
+
+.txn-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.txn-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+.txn-stat-icon { color: var(--maroon-900); }
+
+.txn-stat-label {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.txn-stat-value {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------
+   Controls
+--------------------------------------------------------- */
+
+.txn-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.txn-search-wrap {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 0 12px;
+  color: var(--ink-faint);
+}
+
+.txn-search {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--ink);
+  padding: 10px 0;
+  background: transparent;
+}
+
+.txn-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.txn-error, .txn-loading {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  padding: 16px 18px;
+}
+
+.txn-loading { color: var(--ink-soft); }
+
+.txn-error {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-radius: var(--radius);
+}
+
+/* ---------------------------------------------------------
+   Ledger table
+--------------------------------------------------------- */
+
+.txn-ledger {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.txn-ledger-head {
+  display: grid;
+  grid-template-columns: 1.8fr 1.1fr 1.1fr 1fr 1fr 1fr 0.9fr 0.9fr;
+  gap: 12px;
+  padding: 12px 20px;
+  background: var(--maroon-50);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+}
+
+.txn-row {
+  display: grid;
+  grid-template-columns: 1.8fr 1.1fr 1.1fr 1fr 1fr 1fr 0.9fr 0.9fr;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 14px 20px;
+  border: none;
+  border-top: 1px solid var(--line);
+  border-left: 2px solid transparent;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+  font-family: inherit;
+}
+
+.txn-row:hover {
+  background: var(--maroon-50);
+  border-left-color: var(--maroon-900);
+}
+
+.txn-cell {
+  min-width: 0;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.txn-cell-listing { font-weight: 600; }
+
+.txn-cell-mono {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+/* ---------------------------------------------------------
+   Status badge
+--------------------------------------------------------- */
+
+.txn-status {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 999px;
+  padding: 3px 10px;
+  border: 1px solid var(--line-strong);
+  color: var(--ink-soft);
+  background: #fff;
+}
+
+.status-held { color: var(--amber); background: var(--amber-bg); border-color: transparent; }
+.status-released { color: var(--good); background: var(--good-bg); border-color: transparent; }
+.status-refunded { color: var(--danger); background: var(--danger-bg); border-color: transparent; }
+
+/* ---------------------------------------------------------
+   Drawer
+--------------------------------------------------------- */
+
+.txn-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(33, 22, 19, 0.35);
+  z-index: 40;
+}
+
+.txn-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(420px, 100vw);
+  background: #fff;
+  border-left: 1px solid var(--line-strong);
+  box-shadow: -12px 0 32px rgba(var(--shadow-rgb), 0.18);
+  z-index: 41;
+  overflow-y: auto;
+  padding: 28px 24px 40px;
+}
+
+.txn-drawer-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.txn-drawer-close:hover { color: var(--ink); }
+
+.txn-drawer-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding-right: 24px;
+  margin-bottom: 8px;
+}
+
+.txn-drawer-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+}
+
+.txn-drawer-subtitle {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.txn-drawer-section {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.txn-drawer-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+}
+
+.txn-drawer-meta {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--ink);
+  margin: 0;
+}
+
+.txn-amount-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: 8px;
+  column-gap: 16px;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.txn-amount-grid .txn-cell-mono {
+  color: var(--ink);
+  text-align: right;
+}
+
+/* ---------------------------------------------------------
+   Responsive
+--------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .txn-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 720px) {
+  .txn-ledger-head { display: none; }
+
+  .txn-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .txn-cell::before {
+    content: attr(data-label);
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-faint);
+    margin-bottom: 2px;
+  }
+
+  .txn-cell-listing::before { content: none; }
+
+  .txn-drawer { width: 100vw; }
+}
+
+@media (max-width: 480px) {
+  .section-heading { padding: 16px 18px; font-size: 1.25rem; }
+  .txn-stats { grid-template-columns: 1fr; }
+}
