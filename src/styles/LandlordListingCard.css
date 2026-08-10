@@ -1,0 +1,308 @@
+/* ==========================================================================
+   Landlord listing cards
+   Covers: LandlordListingCard.jsx + LandlordListingCardsGrid.jsx
+
+   NOTE: these class names are shared with the marketplace-side
+   ListingCard.jsx on purpose, so the two look consistent. If a stylesheet
+   already exists for `.listing-card` there, merge these rules into it
+   instead of loading both — otherwise whichever file loads last wins on
+   any overlapping property, which gets confusing fast.
+   ========================================================================== */
+
+:root {
+  /* Palette */
+  --lc-bg: #ffffff;
+  --lc-border: #e8e1dc;
+  --lc-ink: #241a1a;
+  --lc-ink-muted: #7a6e69;
+
+  --lc-maroon: #5c1520;
+  --lc-maroon-dark: #430f17;
+  --lc-maroon-tint: #f6e8e9;
+
+  --lc-success-bg: #e7f3ea;
+  --lc-success-text: #1f7a3d;
+  --lc-pending-bg: #fbf0dd;
+  --lc-pending-text: #96650a;
+  --lc-danger-bg: #fbe7e7;
+  --lc-danger-text: #b3261e;
+  --lc-neutral-bg: #f1efec;
+  --lc-neutral-text: #5b5450;
+
+  /* Type */
+  --lc-font-display: Georgia, 'Times New Roman', serif;
+  --lc-font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ---------- Grid ---------- */
+
+.listing-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.listing-cards-empty {
+  grid-column: 1 / -1;
+  border: 1px dashed var(--lc-border);
+  border-radius: 10px;
+  padding: 40px 24px;
+  text-align: center;
+  font-family: var(--lc-font-body);
+  color: var(--lc-ink-muted);
+  font-size: 0.95rem;
+}
+
+/* ---------- Card shell ---------- */
+
+.listing-card {
+  background: var(--lc-bg);
+  border: 1px solid var(--lc-border);
+  border-radius: 10px;
+  overflow: hidden;
+  font-family: var(--lc-font-body);
+  color: var(--lc-ink);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.listing-card:hover {
+  box-shadow: 0 8px 24px rgba(36, 26, 26, 0.08);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listing-card {
+    transition: none;
+  }
+  .listing-card:hover {
+    transform: none;
+  }
+}
+
+/* ---------- Image + overlays ---------- */
+
+.listing-card-image-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  border: none;
+  background: var(--lc-neutral-bg);
+  cursor: pointer;
+}
+
+.listing-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.listing-card-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--lc-ink-muted);
+  font-size: 0.85rem;
+}
+
+.listing-card-status {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.listing-card-status--neutral { background: var(--lc-neutral-bg); color: var(--lc-neutral-text); }
+.listing-card-status--pending { background: var(--lc-pending-bg); color: var(--lc-pending-text); }
+.listing-card-status--success { background: var(--lc-success-bg); color: var(--lc-success-text); }
+.listing-card-status--danger  { background: var(--lc-danger-bg);  color: var(--lc-danger-text); }
+
+.listing-card-photo-count {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(36, 26, 26, 0.65);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.listing-card-edit-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--lc-maroon);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.listing-card-edit-btn:hover {
+  background: var(--lc-maroon);
+  color: #fff;
+}
+
+.listing-card-edit-btn:focus-visible,
+.listing-card-image-wrap:focus-visible {
+  outline: 2px solid var(--lc-maroon);
+  outline-offset: 2px;
+}
+
+/* ---------- Body ---------- */
+
+.listing-card-body {
+  padding: 16px;
+}
+
+.listing-card-title {
+  margin: 0 0 2px;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.listing-card-type {
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+  color: var(--lc-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.listing-card-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.listing-card-fact {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85rem;
+  color: var(--lc-ink);
+}
+
+.listing-card-fact svg {
+  color: var(--lc-maroon);
+  flex-shrink: 0;
+}
+
+.listing-card-fact-sub {
+  color: var(--lc-ink-muted);
+  font-size: 0.78rem;
+  margin-left: 2px;
+}
+
+/* Price gets the one bit of flourish — a thin maroon rule under a serif
+   figure, like a placard tag rather than a dashboard stat. */
+.listing-card-price-label {
+  margin: 0;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--lc-ink-muted);
+}
+
+.listing-card-price {
+  margin: 2px 0 6px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--lc-maroon);
+  display: inline-block;
+  font-family: var(--lc-font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--lc-ink);
+}
+
+.listing-card-clicks {
+  margin: 0 0 14px;
+  font-size: 0.78rem;
+  color: var(--lc-ink-muted);
+}
+
+/* ---------- Actions ---------- */
+
+.listing-card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.listing-card-submit-btn,
+.listing-card-agent-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 10px;
+  border-radius: 7px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+/* Primary: solid dark maroon */
+.listing-card-submit-btn {
+  background: var(--lc-maroon);
+  color: #fff;
+}
+
+.listing-card-submit-btn:hover {
+  background: var(--lc-maroon-dark);
+}
+
+/* Secondary: maroon outline on white, tint on hover — reads as "the
+   other path", not a lesser action */
+.listing-card-agent-btn {
+  background: #fff;
+  color: var(--lc-maroon);
+  border-color: var(--lc-maroon);
+}
+
+.listing-card-agent-btn:hover {
+  background: var(--lc-maroon-tint);
+}
+
+.listing-card-submit-btn:focus-visible,
+.listing-card-agent-btn:focus-visible {
+  outline: 2px solid var(--lc-maroon-dark);
+  outline-offset: 2px;
+}
+
+.listing-card-submit-btn:disabled,
+.listing-card-agent-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 420px) {
+  .listing-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .listing-card-actions {
+    flex-direction: column;
+  }
+}

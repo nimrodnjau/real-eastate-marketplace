@@ -1,0 +1,487 @@
+/*
+  professionalDashboard.css
+  Shared styles for LawyerDashboard / SurveyorDashboard / ValuerDashboard.
+  Built on the existing UIP Real Estate palette (deep maroon + warm white)
+  and the Spectral / Inter / IBM Plex Mono type system.
+
+  If these fonts are already loaded globally in your app (index.html or a
+  global stylesheet), delete the @import line below to avoid loading them twice.
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+.pd-root {
+  --pd-maroon: #5c1121;
+  --pd-maroon-dark: #3b0a16;
+  --pd-maroon-tint: #f4e7e9;
+  --pd-white: #ffffff;
+  --pd-bg: #faf6f5;
+  --pd-ink: #241014;
+  --pd-ink-soft: #6e5a5d;
+  --pd-border: #e7d9d9;
+  --pd-success: #2f6b4f;
+  --pd-success-bg: #e7f3ec;
+  --pd-warn: #a15b15;
+  --pd-warn-bg: #fbf0e2;
+  --pd-danger: #a32b2b;
+  --pd-danger-bg: #fbeaea;
+
+  --pd-font-display: 'Spectral', Georgia, serif;
+  --pd-font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --pd-font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+
+  --pd-radius: 10px;
+  --pd-radius-sm: 6px;
+  --pd-shadow: 0 1px 2px rgba(36, 16, 20, 0.06), 0 8px 24px rgba(36, 16, 20, 0.06);
+
+  font-family: var(--pd-font-body);
+  color: var(--pd-ink);
+  background: var(--pd-bg);
+  min-height: 100vh;
+}
+
+.pd-root * {
+  box-sizing: border-box;
+}
+
+/* ---------- Shell layout ---------- */
+
+.pd-shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+@media (max-width: 860px) {
+  .pd-shell {
+    grid-template-columns: 1fr;
+  }
+  .pd-sidebar {
+    position: static !important;
+    height: auto !important;
+    flex-direction: row !important;
+    overflow-x: auto;
+    padding: 10px !important;
+  }
+  .pd-nav-item {
+    white-space: nowrap;
+  }
+}
+
+.pd-sidebar {
+  background: var(--pd-maroon);
+  color: var(--pd-white);
+  padding: 24px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.pd-brand {
+  font-family: var(--pd-font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 4px 12px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  margin-bottom: 12px;
+}
+
+.pd-brand span {
+  display: block;
+  font-family: var(--pd-font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: 2px;
+}
+
+.pd-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--pd-radius-sm);
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.78);
+  font-family: var(--pd-font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.pd-nav-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--pd-white);
+}
+
+.pd-nav-item.active {
+  background: var(--pd-white);
+  color: var(--pd-maroon-dark);
+}
+
+.pd-nav-item svg {
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.pd-sidebar-foot {
+  margin-top: auto;
+  padding: 12px;
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.55);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.pd-main {
+  padding: 28px 36px 60px;
+  max-width: 980px;
+}
+
+@media (max-width: 640px) {
+  .pd-main {
+    padding: 20px 16px 40px;
+  }
+}
+
+.pd-topbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pd-topbar h1 {
+  font-family: var(--pd-font-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.pd-topbar-sub {
+  color: var(--pd-ink-soft);
+  font-size: 0.88rem;
+  margin-top: 4px;
+}
+
+/* ---------- Cards & primitives ---------- */
+
+.pd-card {
+  background: var(--pd-white);
+  border: 1px solid var(--pd-border);
+  border-radius: var(--pd-radius);
+  box-shadow: var(--pd-shadow);
+  padding: 22px 24px;
+  margin-bottom: 18px;
+}
+
+.pd-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pd-card-head h2 {
+  font-family: var(--pd-font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.pd-card-sub {
+  color: var(--pd-ink-soft);
+  font-size: 0.83rem;
+  margin-top: 2px;
+}
+
+.pd-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 640px) {
+  .pd-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Forms ---------- */
+
+.pd-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.pd-field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--pd-ink);
+}
+
+.pd-hint {
+  font-size: 0.74rem;
+  color: var(--pd-ink-soft);
+}
+
+.pd-input,
+.pd-select,
+.pd-textarea {
+  font-family: var(--pd-font-body);
+  font-size: 0.9rem;
+  padding: 9px 11px;
+  border: 1px solid var(--pd-border);
+  border-radius: var(--pd-radius-sm);
+  background: var(--pd-white);
+  color: var(--pd-ink);
+  width: 100%;
+}
+
+.pd-input:focus,
+.pd-select:focus,
+.pd-textarea:focus,
+.pd-nav-item:focus-visible,
+.pd-btn:focus-visible {
+  outline: 2px solid var(--pd-maroon);
+  outline-offset: 1px;
+}
+
+.pd-input.mono,
+.pd-mono {
+  font-family: var(--pd-font-mono);
+}
+
+/* ---------- Buttons ---------- */
+
+.pd-btn {
+  font-family: var(--pd-font-body);
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: var(--pd-radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: opacity 0.15s ease, background 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pd-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pd-btn-primary {
+  background: var(--pd-maroon);
+  color: var(--pd-white);
+}
+
+.pd-btn-primary:hover:not(:disabled) {
+  background: var(--pd-maroon-dark);
+}
+
+.pd-btn-ghost {
+  background: transparent;
+  border-color: var(--pd-border);
+  color: var(--pd-ink);
+}
+
+.pd-btn-ghost:hover:not(:disabled) {
+  background: var(--pd-maroon-tint);
+}
+
+.pd-btn-danger {
+  background: transparent;
+  border-color: var(--pd-danger);
+  color: var(--pd-danger);
+}
+
+.pd-btn-danger:hover:not(:disabled) {
+  background: var(--pd-danger-bg);
+}
+
+.pd-btn-sm {
+  padding: 6px 11px;
+  font-size: 0.78rem;
+}
+
+/* ---------- Badges & the verification seal (signature element) ---------- */
+
+.pd-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.pd-badge.success { background: var(--pd-success-bg); color: var(--pd-success); }
+.pd-badge.warn { background: var(--pd-warn-bg); color: var(--pd-warn); }
+.pd-badge.danger { background: var(--pd-danger-bg); color: var(--pd-danger); }
+.pd-badge.neutral { background: var(--pd-maroon-tint); color: var(--pd-maroon-dark); }
+
+/*
+  The "seal": a stamp-style verification mark for the professional's
+  credentials. Licensed professionals sign off on their own work with a
+  seal/stamp in real life, so this dashboard borrows that motif for the one
+  status that matters most here — is this person's credential verified —
+  instead of a generic colored dot. Used once, deliberately, not repeated
+  as decoration elsewhere.
+*/
+.pd-seal {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 2px dashed var(--pd-maroon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-shrink: 0;
+  transform: rotate(-6deg);
+}
+
+.pd-seal-inner {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 1px solid var(--pd-maroon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--pd-font-display);
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--pd-maroon);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding: 4px;
+}
+
+.pd-seal.pending {
+  border-color: var(--pd-ink-soft);
+  opacity: 0.6;
+}
+
+.pd-seal.pending .pd-seal-inner {
+  color: var(--pd-ink-soft);
+  border-color: var(--pd-ink-soft);
+}
+
+/* ---------- Tables / lists ---------- */
+
+.pd-list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--pd-border);
+  flex-wrap: wrap;
+}
+
+.pd-list-row:last-child {
+  border-bottom: none;
+}
+
+.pd-list-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pd-list-title {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.pd-list-meta {
+  font-size: 0.78rem;
+  color: var(--pd-ink-soft);
+}
+
+.pd-figure {
+  font-family: var(--pd-font-mono);
+  font-weight: 600;
+}
+
+/* ---------- Empty states ---------- */
+
+.pd-empty {
+  text-align: center;
+  padding: 34px 16px;
+  color: var(--pd-ink-soft);
+  font-size: 0.88rem;
+}
+
+.pd-empty strong {
+  display: block;
+  color: var(--pd-ink);
+  font-family: var(--pd-font-display);
+  font-size: 1rem;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+/* ---------- Tabs (used inside Finance / Documents) ---------- */
+
+.pd-subtabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--pd-border);
+}
+
+.pd-subtab {
+  background: none;
+  border: none;
+  padding: 8px 4px;
+  margin-right: 14px;
+  font-family: var(--pd-font-body);
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--pd-ink-soft);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.pd-subtab.active {
+  color: var(--pd-maroon);
+  border-bottom-color: var(--pd-maroon);
+}
+
+.pd-loading {
+  color: var(--pd-ink-soft);
+  font-size: 0.86rem;
+  padding: 20px 0;
+}
+
+.pd-error {
+  background: var(--pd-danger-bg);
+  color: var(--pd-danger);
+  border-radius: var(--pd-radius-sm);
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  margin-bottom: 14px;
+}

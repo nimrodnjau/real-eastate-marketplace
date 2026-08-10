@@ -138,7 +138,13 @@ export default function ListingDetail() {
       navigate('/login', { state: { redirectTo: `/listings/${id}` } });
       return;
     }
-    navigate('/dashboard/buyer', { state: { startConversationWith: contactId } });
+    // Navigate to messages with the contact ID as state
+    navigate('/dashboard/messages', { 
+    state: { 
+      startConversationWith: contactId,
+      listingId: listing.id 
+    } 
+    });
   }
 
   async function openDocument(doc) {

@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '../../lib/supabaseClient'; // adjust to your actual client path
 import { useAuth } from '../../context/AuthContext';
+import { uploadAvatarToR2 } from '../../api/uploads';
 import DashboardLayout from '../../components/dashboard/DashboardLayout';
 import StatCard from '../../components/dashboard/StatCard';
 import AgentCredentialsSection from '../../components/dashboard/AgentCredentialsSection';
@@ -19,6 +20,7 @@ import ProfileFormModal from '../../components/dashboard/AgentProfileFormModal';
 import ProfessionalsSection from '../../components/dashboard/ProfessionalsSection';
 import '../../styles/ProfessionalsSection.css';
 import AgentViewingRequestsSection from '../../components/dashboard/AgentViewingRequestsSection';
+import AgentActiveDealsSection from '../../components/dashboard/AgentActiveDealsSection';
 
 
 // Agent dashboard — listings section wired to Supabase, following the
@@ -236,31 +238,17 @@ const [profileFormError, setProfileFormError] = useState(null);
     return { ok: true, listing: data }; // returned so the modal can move into "add photos" mode
   }
 
-  async function handleUpdate(id, values) {
-    const { error } = await supabase
-      .schema('marketplace')
-      .from('listings')
-      .update({
-        title: values.title,
-        description: values.description,
-        property_type: values.property_type,
-        price: values.price,
-        address: values.address,
-        bedrooms: numOrNull(values.bedrooms),
-        bathrooms: numOrNull(values.bathrooms),
-        parking: numOrNull(values.parking),
-        size_value: numOrNull(values.size_value),
-        size_unit: values.property_type === 'land' ? (values.size_unit || null) : null,
-        location_lat: values.location_lat ?? null,
-        location_lng: values.location_lng ?? null,
-      })
-      .eq('id', id);
-
-    if (error) { console.error(error); return { ok: false, error: error.message }; }
-    await fetchListings();
-    return { ok: true };
+  async function handleUpdateProfile(values, avatarFile) {
+  if (avatarFile) {
+    try {
+      await uploadAvatarToR2(avatarFile);
+    } catch (err) {
+      console.error('Failed to upload avatar:', err);
+      setProfileFormError(err.message || 'Photo upload failed. Try a different image.');
+      return { ok: false, error: err.message || 'Photo upload failed.' };
+    }
   }
-  async function handleUpdateProfile(values) {
+
   const { data, error } = await supabase
     .schema('marketplace')
     .from('profiles')
@@ -271,6 +259,10 @@ const [profileFormError, setProfileFormError] = useState(null);
       agency_name: values.agency_name,
       license_number: values.license_number,
       bio: values.bio,
+      location_lat: values.location_lat ?? null,
+      location_lng: values.location_lng ?? null,
+      // avatar_url intentionally omitted — the upload-avatar edge function
+      // already wrote it server-side; the select() below just re-reads it.
     })
     .eq('id', profile.id)
     .select()
@@ -461,7 +453,13 @@ async function handlePublishDraft(listing) {
               </div>
             ),
     },
-    
+    {
+  id: 'active-deals',
+  title: 'Active deals',
+  description: 'Purchase transactions that need your attention, including buyer offers to accept or reject.',
+  icon: 'handshake',
+  content: <AgentActiveDealsSection agentId={profile?.id} />,
+},
     {
       id: 'messages',
       title: 'Messages',

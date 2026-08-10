@@ -1,0 +1,166 @@
+.buyer-profile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 4, 8, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.buyer-profile-card {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  background: var(--color-maroon-900, #3d0f1c);
+  color: var(--color-white, #ffffff);
+  border-radius: 12px;
+  padding: 32px 24px 24px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  font-family: var(--font-inter, 'Inter', sans-serif);
+}
+
+.buyer-profile-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+}
+
+.buyer-profile-close:hover {
+  color: #ffffff;
+}
+
+.buyer-profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 16px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.buyer-profile-avatar--fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  font-family: var(--font-spectral, 'Spectral', serif);
+  font-size: 24px;
+  letter-spacing: 0.5px;
+}
+
+.buyer-profile-name {
+  font-family: var(--font-spectral, 'Spectral', serif);
+  font-size: 20px;
+  margin: 0 0 4px;
+}
+
+.buyer-profile-role {
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.list-row-buyer-btn {
+  font-family: var(--font-inter, 'Inter', sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-maroon-900, #3d0f1c);
+  background: transparent;
+  border: 1px solid var(--color-maroon-900, #3d0f1c);
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.list-row-buyer-btn:hover {
+  background: var(--color-maroon-900, #3d0f1c);
+  color: #ffffff;
+}
+.buyer-profile-suspended {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 120, 120, 0.4);
+  color: #ffb3b3;
+  font-family: var(--font-inter, 'Inter', sans-serif);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 6px;
+  padding: 5px 10px;
+  margin-bottom: 16px;
+}
+
+.buyer-profile-rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: #e8b84b;
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.buyer-profile-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 18px 0 16px;
+}
+
+.buyer-profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.buyer-profile-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-inter, 'Inter', sans-serif);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.buyer-profile-row svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.buyer-profile-row-label {
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  min-width: 60px;
+}
+
+.buyer-profile-bio {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: var(--font-inter, 'Inter', sans-serif);
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: left;
+}

@@ -587,3 +587,58 @@
     padding: 64px 20px 56px;
   }
 }
+.role-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(8, 18, 29, 0.72);
+}
+
+.role-modal {
+  position: relative;
+  width: min(100%, 520px);
+  padding: 2rem;
+  border-radius: 18px;
+  background: #fff;
+  color: #17212b;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+}
+
+.role-modal h2 {
+  margin: 0 0 0.75rem;
+}
+
+.role-modal p {
+  line-height: 1.65;
+}
+
+.role-modal-eyebrow {
+  margin: 0 0 0.5rem;
+  color: #527067;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.role-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  border: 0;
+  background: transparent;
+  color: #17212b;
+  cursor: pointer;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.role-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}

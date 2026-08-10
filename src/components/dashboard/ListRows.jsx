@@ -30,9 +30,9 @@ export default function ListRows({ items, emptyLabel = 'Nothing here yet.' }) {
                 type="button"
                 className="list-row-edit-btn"
                 onClick={item.onClick}
-                aria-label={`Edit ${item.title}`}
+                aria-label={`${item.actionLabel || 'Edit'} ${item.title}`}
               >
-                Edit
+                {item.actionLabel || 'Edit'}
               </button>
             )}
           </div>

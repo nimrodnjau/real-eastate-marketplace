@@ -1,0 +1,233 @@
+/* Palette/type follow the existing marketplace system: dark maroon/white,
+   Spectral for headings, Inter for body, IBM Plex Mono for meta/data.
+   The custom properties below fall back to literal values — replace the
+   fallbacks with your real tokens if they're named differently. */
+
+.rep-picker-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 6, 10, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 1000;
+}
+
+.rep-picker {
+  width: min(560px, 100%);
+  max-height: min(680px, 90vh);
+  overflow-y: auto;
+  background: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-maroon-100, #e7d6d8);
+  border-radius: 14px;
+  box-shadow: 0 24px 60px rgba(26, 6, 10, 0.35);
+  padding: 28px;
+}
+
+.rep-picker__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.rep-picker__header h2 {
+  font-family: var(--font-display, 'Spectral', serif);
+  font-size: 1.4rem;
+  margin: 0 0 4px;
+  color: var(--color-maroon-900, #3d0c14);
+}
+
+.rep-picker__header p {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.9rem;
+  color: var(--color-text-muted, #6b5457);
+  margin: 0;
+}
+
+.rep-picker__close {
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-text-muted, #6b5457);
+}
+
+.rep-picker__tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--color-maroon-100, #e7d6d8);
+}
+
+.rep-picker__tab {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.85rem;
+  padding: 8px 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--color-text-muted, #6b5457);
+  border-bottom: 2px solid transparent;
+}
+
+.rep-picker__tab--active {
+  color: var(--color-maroon-900, #3d0c14);
+  border-bottom-color: var(--color-maroon-900, #3d0c14);
+  font-weight: 600;
+}
+
+.rep-picker__status,
+.rep-picker__error {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.9rem;
+  color: var(--color-text-muted, #6b5457);
+  padding: 16px 0;
+}
+
+.rep-picker__error {
+  color: var(--color-error, #b3261e);
+}
+
+.rep-picker__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rep-card {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--color-maroon-100, #e7d6d8);
+  border-radius: 10px;
+  align-items: flex-start;
+}
+
+.rep-card__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--color-maroon-100, #e7d6d8);
+}
+
+.rep-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.rep-card__name {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 600;
+  color: var(--color-maroon-900, #3d0c14);
+}
+
+.rep-card__meta {
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #6b5457);
+}
+
+.rep-card__bio {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #6b5457);
+  margin: 6px 0 0;
+}
+
+.rep-card__action {
+  flex-shrink: 0;
+}
+
+.rep-card__request-btn {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.8rem;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--color-maroon-900, #3d0c14);
+  background: var(--color-maroon-900, #3d0c14);
+  color: #fff;
+  cursor: pointer;
+}
+
+.rep-card__request-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.rep-card__badge {
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--color-maroon-100, #e7d6d8);
+  color: var(--color-maroon-900, #3d0c14);
+}
+
+.rep-card__badge--accepted {
+  background: #dcefe1;
+  color: #1e6b3a;
+}
+
+.rep-card__badge--rejected {
+  background: #f4d8d8;
+  color: #a12626;
+}
+.rep-card {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--color-maroon-100, #e7d6d8);
+  border-radius: 10px;
+  align-items: flex-start;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.rep-card:hover {
+  border-color: var(--color-maroon-900, #3d0c14);
+  box-shadow: 0 6px 18px rgba(26, 6, 10, 0.12);
+  transform: translateY(-1px);
+}
+
+.rep-card:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(26, 6, 10, 0.1);
+}
+
+.rep-card:focus-visible {
+  outline: 2px solid var(--color-maroon-900, #3d0c14);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rep-card {
+    transition: none;
+  }
+  .rep-card:hover,
+  .rep-card:active {
+    transform: none;
+  }
+}
+
+/* The Request button sits inside a clickable card but does its own separate
+   thing (stopPropagation in the JS) — keep its own affordance distinct so
+   hovering the button doesn't read as "open profile". */
+.rep-card__request-btn {
+  cursor: pointer;
+}
+
+.rep-card__request-btn:hover:not(:disabled) {
+  background: var(--color-maroon-800, #591620);
+  border-color: var(--color-maroon-800, #591620);
+}

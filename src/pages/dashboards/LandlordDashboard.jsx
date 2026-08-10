@@ -1,105 +1,91 @@
+import { useEffect, useState } from 'react';
 import DashboardLayout from '../../components/dashboard/DashboardLayout';
 import StatCard from '../../components/dashboard/StatCard';
-import ListRows from '../../components/dashboard/ListRows';
-import ProcessTracker from '../../components/dashboard/ProcessTracker';
+import { supabase } from '../../lib/supabaseClient';
+import { useLandlordUnitsSection } from '../../components/dashboard/useLandlordUnitsSection';
+import { useLandlordNearbySections } from '../../components/dashboard/useLandlordNearbySections';
+import { useLandlordMessagesSection } from '../../components/dashboard/useLandlordMessagesSection';
 import '../../styles/dashboard.css';
 
-// Landlord dashboard — split out from the old shared
-// RoleDashboard + dashboardContent.js config so this role's content lives
-// in one independent, top-to-bottom readable file. Swap the placeholder
-// arrays below for real Supabase queries later; DashboardLayout, StatCard,
-// ListRows, and ProcessTracker don't need to change to do that.
-
-const STATS = [
-  {
-    "label": "Listed units",
-    "value": "8",
-    "icon": "key"
-  },
-  {
-    "label": "Total clicks",
-    "value": "342",
-    "icon": "trendingUp"
-  },
-  {
-    "label": "Active leases",
-    "value": "5",
-    "icon": "clipboardList"
-  }
-];
-
-const SECTIONS = [
-  {
-    "id": "units",
-    "title": "Your units",
-    "description": "Performance on each unit you have listed.",
-    "icon": "key",
-    "type": "list",
-    "action": {
-      "label": "List a unit"
-    },
-    "items": [
-      {
-        "title": "2-bed apartment, Lavington — Unit 4B",
-        "meta": "58 clicks",
-        "badge": "Occupied",
-        "badgeTone": "success"
-      },
-      {
-        "title": "Studio, South B — Unit 1A",
-        "meta": "21 clicks",
-        "badge": "Vacant",
-        "badgeTone": "pending"
-      }
-    ]
-  },
-  {
-    "id": "managers",
-    "title": "Property managers near you",
-    "description": "Hand off day-to-day management.",
-    "icon": "users",
-    "type": "list",
-    "items": [
-      {
-        "title": "Nairobi Estates Management",
-        "meta": "3.4 km away",
-        "badge": "Verified",
-        "badgeTone": "success"
-      },
-      {
-        "title": "Greenview Property Managers",
-        "meta": "5.1 km away",
-        "badge": "Verified",
-        "badgeTone": "success"
-      }
-    ]
-  }
-];
+// Landlord dashboard — "Your units" lives in
+// components/dashboard/useLandlordUnitsSection.jsx, "Property managers near
+// you" and "Agents near you" live in
+// components/dashboard/useLandlordNearbySections.jsx, "Messages" reuses the
+// shared MessagesSection component via
+// components/dashboard/useLandlordMessagesSection.jsx. This file only owns:
+// auth/user lookup and composing the page.
 
 export default function LandlordDashboard() {
-  const sections = SECTIONS.map((section) => ({
-    ...section,
-    content:
-      section.type === 'process' ? (
-        <ProcessTracker steps={section.steps} />
-      ) : (
-        <ListRows items={section.items} emptyLabel={section.emptyLabel} />
-      ),
-  }));
+  const [userId, setUserId] = useState(null);
+  const [authError, setAuthError] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadUser() {
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (cancelled) return;
+
+      if (userError || !userData?.user) {
+        setAuthError(userError ?? new Error('No logged-in user'));
+        return;
+      }
+      setUserId(userData.user.id);
+    }
+
+    loadUser();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const {
+    section: unitsSection,
+    stats: unitStats,
+    error: unitsError,
+    modalElement,
+    pickerElement,
+  } = useLandlordUnitsSection(userId);
+
+  const {
+    managersSection,
+    agentsSection,
+    error: nearbyError,
+    modalElement: nearbyModalElement,
+  } = useLandlordNearbySections();
+
+  const {
+    section: messagesSection,
+    error: messagesError,
+  } = useLandlordMessagesSection();
+
+  const sections = [unitsSection, managersSection, agentsSection, messagesSection];
+  const displayError = authError || unitsError || nearbyError || messagesError;
 
   return (
-    <DashboardLayout
-      roleLabel="Landlord"
-      pageTitle="Landlord dashboard"
-      pageSubtitle="Your leased units and the managers helping you run them."
-      sections={sections}
-      verificationStatus={null}
-    >
-      <div className="stat-grid">
-        {STATS.map((s) => (
-          <StatCard key={s.label} icon={s.icon} label={s.label} value={s.value} hint={s.hint} />
-        ))}
-      </div>
-    </DashboardLayout>
+    <>
+      <DashboardLayout
+        roleLabel="Landlord"
+        pageTitle="Landlord dashboard"
+        pageSubtitle="Your leased units and the managers helping you run them."
+        sections={sections}
+        verificationStatus={null}
+      >
+        <div className="stat-grid">
+          {unitStats.map((s) => (
+            <StatCard key={s.label} icon={s.icon} label={s.label} value={s.value} hint={s.hint} />
+          ))}
+        </div>
+        {displayError && (
+          <p className="dashboard-error" role="alert">
+            Couldn't load your dashboard data — try refreshing.
+          </p>
+        )}
+      </DashboardLayout>
+
+      {modalElement}
+      {pickerElement}
+      {nearbyModalElement}
+    </>
   );
 }

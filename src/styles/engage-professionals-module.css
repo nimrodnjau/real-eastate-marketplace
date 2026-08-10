@@ -1,0 +1,218 @@
+/* engage-professionals-module.css
+   White window, dark maroon buttons. Swap --ep-* for your real tokens
+   if you already have a shared variables file. */
+
+.engage-professionals-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 6vh 1rem 2rem;
+  background: rgba(24, 15, 15, 0.55);
+  overflow-y: auto;
+}
+
+.engage-professionals-window {
+  --ep-maroon: #5c1a24;
+  --ep-maroon-hover: #711f2c;
+  --ep-border: #e9e2e2;
+  --ep-muted: #7a6f6f;
+  --ep-text: #201414;
+
+  width: 100%;
+  max-width: 680px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.engage-professionals-window-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid var(--ep-border);
+}
+
+.engage-professionals-window-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ep-text);
+}
+
+.engage-professionals-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ep-muted);
+  cursor: pointer;
+}
+
+.engage-professionals-close:hover {
+  background: #f3ecec;
+  color: var(--ep-text);
+}
+
+.engage-professionals-window-body {
+  padding: 1.4rem;
+  max-height: 72vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.engage-professionals-state,
+.engage-professionals-complete {
+  color: var(--ep-muted, #7a6f6f);
+  font-size: 0.9rem;
+}
+
+.engage-professionals-error {
+  color: #b91c1c;
+  font-size: 0.85rem;
+}
+
+.engage-professionals-heading {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ep-text, #201414);
+}
+
+.engage-professionals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 1rem;
+}
+
+.engage-professionals-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem;
+  border: 1px solid var(--ep-border, #e9e2e2);
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.engage-professionals-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.25rem;
+}
+
+.engage-professionals-name {
+  margin: 0;
+  font-weight: 600;
+  color: var(--ep-text, #201414);
+}
+
+.engage-professionals-license,
+.engage-professionals-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--ep-muted, #7a6f6f);
+}
+
+.engage-professionals-bio {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  color: var(--ep-text, #201414);
+  line-height: 1.4;
+}
+
+.engage-professionals-credential-link {
+  font-size: 0.82rem;
+  color: #5c1a24;
+  text-decoration: underline;
+  width: fit-content;
+}
+
+.engage-professionals-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.engage-professionals-card-actions button {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: 1px solid #5c1a24;
+  background: #ffffff;
+  color: #5c1a24;
+}
+
+/* Second button ("Confirm as ...") is the primary action — solid maroon. */
+.engage-professionals-card-actions button:last-child {
+  background: #5c1a24;
+  color: #ffffff;
+}
+
+.engage-professionals-card-actions button:hover:not(:disabled) {
+  background: #711f2c;
+  color: #ffffff;
+}
+
+.engage-professionals-card-actions button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.engage-professionals-card-actions button:focus-visible,
+.engage-professionals-close:focus-visible {
+  outline: 2px solid #5c1a24;
+  outline-offset: 2px;
+}
+
+/* Slim bar shown after the window is closed, so progress isn't lost —
+   reopens the same window. */
+.engage-professionals-reopen {
+  display: block;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid #5c1a24;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #5c1a24;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.engage-professionals-reopen:hover {
+  background: #fbf3f3;
+}
+
+@media (max-width: 480px) {
+  .engage-professionals-overlay {
+    padding: 0;
+    align-items: stretch;
+  }
+  .engage-professionals-window {
+    max-width: none;
+    height: 100%;
+    border-radius: 0;
+  }
+  .engage-professionals-window-body {
+    max-height: none;
+  }
+}

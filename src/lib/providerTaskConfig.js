@@ -26,3 +26,15 @@ export const PROVIDER_TASK_CONFIG = {
     directoryTitle: 'Choose a surveyor',
   },
 };
+
+// Sets of task_keys that render as one combined module (via GROUP_RENDERERS
+// in StageTaskModule) instead of one row each. Rendering order within a
+// group still comes from stage_task_templates.sort_order, not from the
+// order listed here.
+//
+// Add an entry here whenever several tasks in a stage should be walked
+// through one-at-a-time in a single stepper UI instead of showing as
+// separate simultaneous checklist rows.
+export const TASK_GROUPS = {
+  engage_professionals: ['hire_lawyer', 'schedule_valuer', 'schedule_surveyor'],
+};

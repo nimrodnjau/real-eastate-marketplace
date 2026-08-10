@@ -1,0 +1,63 @@
+.stage2-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.stage2-offer {
+  border: 1px solid var(--stage-border);
+  border-left: 3px solid var(--stage-border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  background: var(--stage-paper-raised);
+}
+
+.stage2-offer--mine {
+  border-left-color: var(--stage-brass);
+}
+
+.stage2-offer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.stage2-offer-from {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--stage-ink-soft);
+}
+
+.stage2-offer-amount {
+  font-size: 20px;
+  margin: 0 0 4px;
+}
+
+.stage2-offer-message {
+  font-size: 13px;
+  color: var(--stage-ink-soft);
+  margin: 0 0 6px;
+  line-height: 1.4;
+}
+
+.stage2-offer-time {
+  font-family: var(--stage-font-mono);
+  font-size: 10.5px;
+  color: var(--stage-ink-soft);
+  opacity: 0.7;
+  margin: 0;
+}
+
+.stage2-respond {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.stage2-offer-form-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}

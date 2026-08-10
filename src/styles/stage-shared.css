@@ -1,0 +1,371 @@
+/* ============================================================
+   STAGE UI — shared tokens & window chrome
+   Design language: an official case file moving through
+   checkpoints. Ink-navy + brass, a wax-seal "stamp" marks
+   completion instead of a generic checkmark.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
+
+.stage-ui {
+  --stage-ink: #5c1425;
+  --stage-ink-soft: #8a4a58;
+  --stage-paper: #ffffff;
+  --stage-paper-raised: #ffffff;
+  --stage-brass: #7a1f35;
+  --stage-brass-soft: #f3dde2;
+  --stage-verified: #2f6f4e;
+  --stage-verified-soft: #dceae1;
+  --stage-alert: #a6432f;
+  --stage-alert-soft: #f3ddd5;
+  --stage-border: #e3d4d8;
+  --stage-shadow: 0 1px 2px rgba(92, 20, 37, 0.08), 0 8px 24px rgba(92, 20, 37, 0.08);
+
+  --stage-font-display: 'Fraunces', Georgia, serif;
+  --stage-font-body: 'IBM Plex Sans', -apple-system, sans-serif;
+  --stage-font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  font-family: var(--stage-font-body);
+  color: var(--stage-ink);
+}
+
+.stage-ui * {
+  box-sizing: border-box;
+}
+
+/* ---------- window shell ---------- */
+
+.stage-window {
+  background: var(--stage-paper-raised);
+  border: 1px solid var(--stage-border);
+  border-radius: 10px;
+  box-shadow: var(--stage-shadow);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.stage-window-header {
+  position: relative;
+  padding: 22px 24px 20px;
+  background:
+    linear-gradient(180deg, var(--stage-ink) 0%, #3a0d1a 100%);
+  color: #ffffff;
+}
+
+.stage-window-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--stage-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #e8d3d8;
+  margin: 0 0 6px;
+}
+
+.stage-window-eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.stage-window-title {
+  font-family: var(--stage-font-display);
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+.stage-window-subtitle {
+  margin: 0;
+  font-size: 13.5px;
+  color: #e8d3d8;
+  max-width: 52ch;
+  line-height: 1.5;
+}
+
+.stage-window-messages-toggle {
+  position: absolute;
+  top: 20px;
+  right: 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  color: #ffffff;
+  font-family: var(--stage-font-body);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 7px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.stage-window-messages-toggle:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.stage-window-messages-badge {
+  background: #ffffff;
+  color: var(--stage-ink);
+  font-family: var(--stage-font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.stage-window-body {
+  padding: 22px 24px 26px;
+}
+
+/* ---------- stamp: the signature element ---------- */
+/* A rotated wax-seal ring. Appears small inline next to completed
+   sub-steps, and large in a window header once the whole stage clears. */
+
+.stage-stamp {
+  --stamp-size: 34px;
+  width: var(--stamp-size);
+  height: var(--stamp-size);
+  border-radius: 50%;
+  border: 1.5px solid var(--stage-verified);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-8deg);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.stage-stamp::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--stage-verified);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.stage-stamp svg {
+  width: 40%;
+  height: 40%;
+  stroke: var(--stage-verified);
+}
+
+.stage-stamp--large {
+  --stamp-size: 64px;
+}
+
+.stage-stamp--pending {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.stage-stamp--pending::before {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.stage-window-cleared {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--stage-verified-soft);
+  border: 1px dashed var(--stage-verified);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.stage-window-cleared-text p {
+  margin: 0;
+}
+
+.stage-window-cleared-title {
+  font-family: var(--stage-font-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--stage-verified);
+}
+
+.stage-window-cleared-sub {
+  font-size: 12.5px;
+  color: var(--stage-ink-soft);
+  margin-top: 2px !important;
+}
+
+/* ---------- shared bits: pills, buttons, fields ---------- */
+
+.stage-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-family: var(--stage-font-mono);
+  letter-spacing: 0.01em;
+}
+
+.stage-pill--pending { background: #f2e9eb; color: var(--stage-ink-soft); }
+.stage-pill--active { background: var(--stage-brass-soft); color: var(--stage-brass); }
+.stage-pill--verified { background: var(--stage-verified-soft); color: var(--stage-verified); }
+.stage-pill--alert { background: var(--stage-alert-soft); color: var(--stage-alert); }
+
+.stage-btn {
+  font-family: var(--stage-font-body);
+  font-size: 13.5px;
+  font-weight: 600;
+  border-radius: 7px;
+  padding: 10px 18px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s ease, opacity 0.15s ease;
+}
+
+.stage-btn:active { transform: scale(0.98); }
+.stage-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.stage-btn--primary {
+  background: var(--stage-ink);
+  color: #ffffff;
+}
+
+.stage-btn--primary:hover:not(:disabled) { background: #3a0d1a; }
+
+.stage-btn--brass {
+  background: var(--stage-brass);
+  color: #ffffff;
+}
+
+.stage-btn--ghost {
+  background: transparent;
+  color: var(--stage-ink);
+  border: 1px solid var(--stage-border);
+}
+
+.stage-btn--ghost:hover:not(:disabled) { background: var(--stage-brass-soft); }
+
+.stage-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--stage-ink-soft);
+  margin-bottom: 14px;
+}
+
+.stage-field input,
+.stage-field textarea,
+.stage-field select {
+  font-family: var(--stage-font-body);
+  font-size: 14px;
+  color: var(--stage-ink);
+  border: 1px solid var(--stage-border);
+  border-radius: 7px;
+  padding: 10px 12px;
+  background: #ffffff;
+}
+
+.stage-field input:focus,
+.stage-field textarea:focus,
+.stage-field select:focus {
+  outline: 2px solid var(--stage-brass);
+  outline-offset: 1px;
+}
+
+.stage-amount {
+  font-family: var(--stage-font-mono);
+  font-weight: 500;
+}
+
+.stage-empty {
+  font-size: 13.5px;
+  color: var(--stage-ink-soft);
+  padding: 14px 0;
+}
+
+.stage-divider {
+  border: none;
+  border-top: 1px solid var(--stage-border);
+  margin: 20px 0;
+}
+
+/* ---------- sub-step stepper (wraps ProcessTracker markup) ---------- */
+
+.stage-substeps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 22px;
+}
+
+.stage-substep {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.stage-substep-connector {
+  flex: 1;
+  height: 1px;
+  background: var(--stage-border);
+  margin: 0 8px;
+}
+
+.stage-substep-marker {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--stage-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--stage-font-mono);
+  font-size: 10.5px;
+  color: var(--stage-ink-soft);
+}
+
+.stage-substep--done .stage-substep-marker {
+  border-color: var(--stage-verified);
+  background: var(--stage-verified-soft);
+  color: var(--stage-verified);
+}
+
+.stage-substep--active .stage-substep-marker {
+  border-color: var(--stage-brass);
+  background: var(--stage-brass-soft);
+  color: var(--stage-brass);
+}
+
+.stage-substep-label {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--stage-ink-soft);
+  white-space: nowrap;
+}
+
+.stage-substep--done .stage-substep-label,
+.stage-substep--active .stage-substep-label {
+  color: var(--stage-ink);
+}
+
+@media (max-width: 560px) {
+  .stage-substep-label { display: none; }
+  .stage-window-messages-toggle span:not(.stage-window-messages-badge) { display: none; }
+}

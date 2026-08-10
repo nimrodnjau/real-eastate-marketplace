@@ -4,9 +4,15 @@ import { supabase } from '../../lib/supabaseClient'; // adjust to your actual cl
 import LocationPicker from './LocationPicker';
 import '../../styles/location-picker.css';
 
+// Commercial types share the "size + floors/units + zoning" field set below.
+// Add new commercial subtypes here (e.g. 'industrial') and they'll get the
+// same fields automatically — no branch changes needed elsewhere.
+const COMMERCIAL_TYPES = ['office', 'retail', 'warehouse'];
+
 const EMPTY = {
   title: '', description: '', property_type: 'land', price: '', address: '',
   bedrooms: '', bathrooms: '', parking: '', size_value: '', size_unit: 'acres',
+  floor_count: '', zoning_type: '', deposit_amount: '',
   location_lat: null, location_lng: null,
 };
 const MAX_IMAGES = 6;
@@ -47,6 +53,9 @@ export default function ListingFormModal({ listing, propertyTypes, error, onSave
     parking: listing.parking ?? '',
     size_value: listing.size_value ?? '',
     size_unit: listing.size_unit || 'acres',
+    floor_count: listing.floor_count ?? '',
+    zoning_type: listing.zoning_type || '',
+    deposit_amount: listing.deposit_amount ?? '',
     location_lat: listing.location_lat ?? null,
     location_lng: listing.location_lng ?? null,
   } : EMPTY);
@@ -64,6 +73,8 @@ export default function ListingFormModal({ listing, propertyTypes, error, onSave
   const isLocked = activeListing && LOCKED_STATUSES.includes(activeListing.status);
   const willReturnToReview = activeListing && activeListing.status === 'active';
   const canUploadPhotos = !!activeListing?.id;
+  const isCommercial = COMMERCIAL_TYPES.includes(values.property_type);
+  const isLand = values.property_type === 'land';
 
   const set = (field, val) => setValues((v) => ({ ...v, [field]: val }));
 
@@ -239,7 +250,7 @@ export default function ListingFormModal({ listing, propertyTypes, error, onSave
                 )}
               </div>
 
-              {values.property_type === 'land' ? (
+              {isLand && (
                 <>
                   <label>Size
                     <input
@@ -256,7 +267,51 @@ export default function ListingFormModal({ listing, propertyTypes, error, onSave
                     </select>
                   </label>
                 </>
-              ) : (
+              )}
+
+              {isCommercial && (
+                <>
+                  <label>Size
+                    <input
+                      type="number" min="0" step="0.01"
+                      value={values.size_value}
+                      onChange={(e) => set('size_value', e.target.value)}
+                    />
+                  </label>
+                  <label>Size unit
+                    <select value={values.size_unit} onChange={(e) => set('size_unit', e.target.value)}>
+                      <option value="sqm">Square meters</option>
+                      <option value="sqft">Square feet</option>
+                      <option value="acres">Acres</option>
+                    </select>
+                  </label>
+                  <label>Floors / units
+                    <input
+                      type="number" min="0"
+                      value={values.floor_count}
+                      onChange={(e) => set('floor_count', e.target.value)}
+                      placeholder="e.g. 3"
+                    />
+                  </label>
+                  <label>Zoning type
+                    <input
+                      value={values.zoning_type}
+                      onChange={(e) => set('zoning_type', e.target.value)}
+                      placeholder="e.g. commercial, mixed-use"
+                    />
+                  </label>
+                  <label>Deposit (KES)
+                    <input
+                      type="number" min="0"
+                      value={values.deposit_amount}
+                      onChange={(e) => set('deposit_amount', e.target.value)}
+                      placeholder="e.g. 2 months rent"
+                    />
+                  </label>
+                </>
+              )}
+
+              {!isLand && !isCommercial && (
                 <>
                   <label>Bedrooms
                     <input type="number" min="0" value={values.bedrooms} onChange={(e) => set('bedrooms', e.target.value)} />
@@ -266,6 +321,14 @@ export default function ListingFormModal({ listing, propertyTypes, error, onSave
                   </label>
                   <label>Parking spaces
                     <input type="number" min="0" value={values.parking} onChange={(e) => set('parking', e.target.value)} />
+                  </label>
+                  <label>Deposit (KES)
+                    <input
+                      type="number" min="0"
+                      value={values.deposit_amount}
+                      onChange={(e) => set('deposit_amount', e.target.value)}
+                      placeholder="e.g. 2 months rent"
+                    />
                   </label>
                 </>
               )}

@@ -1,0 +1,122 @@
+.stage1-section-title {
+  font-family: var(--stage-font-display);
+  font-size: 15.5px;
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+
+.stage1-section-hint {
+  font-size: 12.5px;
+  color: var(--stage-ink-soft);
+  margin: 0 0 10px;
+}
+
+.stage1-inquiry-form {
+  max-width: 480px;
+}
+
+.stage1-slot-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stage1-slot-button {
+  font-family: var(--stage-font-mono);
+  font-size: 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--stage-border);
+  border-radius: 7px;
+  background: var(--stage-paper-raised);
+  cursor: pointer;
+}
+
+.stage1-slot-button.is-selected {
+  border-color: var(--stage-brass);
+  background: var(--stage-brass-soft);
+  color: var(--stage-brass);
+}
+
+.stage1-role-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.stage1-role-tab {
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--stage-border);
+  background: var(--stage-paper-raised);
+  color: var(--stage-ink-soft);
+  cursor: pointer;
+}
+
+.stage1-role-tab.is-active {
+  border-color: var(--stage-ink);
+  color: var(--stage-ink);
+  background: var(--stage-paper);
+}
+
+.stage1-role-tab.is-done {
+  color: var(--stage-verified);
+  border-color: var(--stage-verified);
+}
+
+.stage1-provider-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.stage1-provider-card {
+  border: 1px solid var(--stage-border);
+  border-radius: 8px;
+  padding: 14px;
+  background: var(--stage-paper-raised);
+}
+
+.stage1-provider-card.is-selected {
+  border-color: var(--stage-brass);
+  box-shadow: 0 0 0 1px var(--stage-brass);
+}
+
+.stage1-provider-name {
+  font-family: var(--stage-font-display);
+  font-weight: 600;
+  font-size: 14.5px;
+  margin: 0 0 4px;
+}
+
+.stage1-provider-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  color: var(--stage-ink-soft);
+  margin: 0 0 8px;
+}
+
+.stage1-provider-dot {
+  margin: 0 2px;
+}
+
+.stage1-provider-bio {
+  font-size: 12.5px;
+  color: var(--stage-ink-soft);
+  line-height: 1.45;
+  margin: 0 0 12px;
+}
+
+.stage1-provider-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.stage1-provider-actions .stage-btn {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 12.5px;
+}

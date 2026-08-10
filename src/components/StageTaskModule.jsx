@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { db } from '../lib/supabaseClient';
 import HireProviderTask from './HireProviderTask';
 import ScheduleProviderTask from './ScheduleProviderTask';
-import { PROVIDER_TASK_CONFIG } from '../lib/providerTaskConfig';
+import EngageProfessionalsModule from './EngageProfessionalsModule';
+import { PROVIDER_TASK_CONFIG, TASK_GROUPS } from '../lib/providerTaskConfig';
 import '../styles/stage-task-module.css';
 
 // Add an entry here whenever a new task gets its own mini-module instead of
@@ -12,6 +13,22 @@ const CUSTOM_RENDERERS = {
   schedule: ScheduleProviderTask,
 };
 
+// Add an entry here whenever several task_keys in a stage (see TASK_GROUPS
+// in providerTaskConfig.js) should collapse into a single combined module
+// instead of one row per task. The renderer receives all of the group's
+// task rows and decides internally which one is "active".
+const GROUP_RENDERERS = {
+  engage_professionals: EngageProfessionalsModule,
+};
+
+// Reverse lookup: task_key -> group name
+const TASK_KEY_TO_GROUP = Object.entries(TASK_GROUPS).reduce((acc, [groupName, keys]) => {
+  keys.forEach((k) => {
+    acc[k] = groupName;
+  });
+  return acc;
+}, {});
+
 export default function StageTaskModule({
   transactionId,
   stage,
@@ -19,6 +36,7 @@ export default function StageTaskModule({
   agentId,
   sellerId,
   viewerId,
+  listingId,
   onStageAdvance,
 }) {
   const [tasks, setTasks] = useState([]);
@@ -145,6 +163,18 @@ export default function StageTaskModule({
 
   const doneCount = tasks.filter((t) => completions[t.task_key]).length;
 
+  // Group members after the first (by sort_order) are skipped in the list
+  // below — the group's single anchor row renders the group's renderer,
+  // which handles all of that group's tasks itself.
+  const groupAnchors = {};
+  const skipKeys = new Set();
+  tasks.forEach((t) => {
+    const groupName = TASK_KEY_TO_GROUP[t.task_key];
+    if (!groupName) return;
+    if (!(groupName in groupAnchors)) groupAnchors[groupName] = t.task_key;
+    else skipKeys.add(t.task_key);
+  });
+
   return (
     <div className="stage-task-module">
       <div className="stage-task-module-header">
@@ -155,6 +185,30 @@ export default function StageTaskModule({
 
       <ul className="stage-task-module-list">
         {tasks.map((task) => {
+          if (skipKeys.has(task.task_key)) return null;
+
+          const groupName = TASK_KEY_TO_GROUP[task.task_key];
+          const GroupRenderer = groupName ? GROUP_RENDERERS[groupName] : null;
+
+          if (GroupRenderer) {
+            const groupTasks = tasks.filter((t) => TASK_KEY_TO_GROUP[t.task_key] === groupName);
+            return (
+              <li key={task.task_key} className="stage-task-module-item has-custom-module">
+                <div className="stage-task-module-item-text stage-task-module-item-text-full">
+                  <GroupRenderer
+                    transactionId={transactionId}
+                    tasks={groupTasks}
+                    completions={completions}
+                    canToggle={canToggle}
+                    justAdvanced={justAdvanced}
+                    onTaskCompleted={handleCustomTaskCompleted}
+                    listingId={listingId}
+                  />
+                </div>
+              </li>
+            );
+          }
+
           const isDone = Boolean(completions[task.task_key]);
           const editable = canToggle(task.owner_role) && !justAdvanced;
           const isPending = pendingKey === task.task_key;
