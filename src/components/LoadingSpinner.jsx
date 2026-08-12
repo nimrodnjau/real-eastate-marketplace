@@ -4,10 +4,11 @@ import '../styles/loading-spinner.css';
 export default function LoadingSpinner({
   message = 'Loading...',
   fullPage = false,
+  className = '',
 }) {
   return (
     <div
-      className={`loading-spinner${fullPage ? ' loading-spinner--full-page' : ''}`}
+      className={`loading-spinner${fullPage ? ' loading-spinner--full-page' : ''}${className ? ` ${className}` : ''}`}
       role="status"
       aria-live="polite"
       aria-label={message}

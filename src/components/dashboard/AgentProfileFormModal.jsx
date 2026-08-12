@@ -3,14 +3,24 @@ import LocationPicker from './LocationPicker';
 import '../../styles/AgentProfileFormModal.css';
 import { uploadAvatarToR2 } from '../../api/uploads';
 
-export default function ProfileFormModal({ profile, error, onSave, onClose }) {
-  const [values, setValues] = useState({
-    full_name: profile?.full_name || '',
-    phone: profile?.phone || '',
-    email: profile?.email || '',
-    agency_name: profile?.agency_name || '',
-    license_number: profile?.license_number || '',
-    bio: profile?.bio || '',
+// Despite the filename (kept as-is so nothing importing it needs to change),
+// this is now generic: it renders whatever roleConfig.extraFormFields says,
+// and only shows the location picker when roleConfig.supportsLocation is true.
+export default function ProfileFormModal({ profile, roleConfig, error, onSave, onClose }) {
+  const extraFields = roleConfig?.extraFormFields || [];
+  const supportsLocation = !!roleConfig?.supportsLocation;
+
+  const [values, setValues] = useState(() => {
+    const base = {
+      full_name: profile?.full_name || '',
+      phone: profile?.phone || '',
+      email: profile?.email || '',
+      bio: profile?.bio || '',
+    };
+    extraFields.forEach((f) => {
+      base[f.key] = profile?.[f.key] || '';
+    });
+    return base;
   });
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(profile?.avatar_url || null);
@@ -86,7 +96,10 @@ export default function ProfileFormModal({ profile, error, onSave, onClose }) {
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true);
-    const result = await onSave({ ...values, location_lat: location.lat, location_lng: location.lng }, avatarFile);
+    const payload = supportsLocation
+      ? { ...values, location_lat: location.lat, location_lng: location.lng }
+      : { ...values };
+    const result = await onSave(payload, avatarFile);
     setSaving(false);
     if (result?.ok) onClose();
   }
@@ -139,20 +152,25 @@ export default function ProfileFormModal({ profile, error, onSave, onClose }) {
               onChange={(e) => update('phone', e.target.value)}
             />
           </label>
-          <label>
-            Agency name
-            <input
-              value={values.agency_name}
-              onChange={(e) => update('agency_name', e.target.value)}
-            />
-          </label>
-          <label>
-            License number
-            <input
-              value={values.license_number}
-              onChange={(e) => update('license_number', e.target.value)}
-            />
-          </label>
+
+          {extraFields.map((f) => (
+            <label key={f.key}>
+              {f.label}
+              {f.type === 'textarea' ? (
+                <textarea
+                  rows={3}
+                  value={values[f.key] || ''}
+                  onChange={(e) => update(f.key, e.target.value)}
+                />
+              ) : (
+                <input
+                  value={values[f.key] || ''}
+                  onChange={(e) => update(f.key, e.target.value)}
+                />
+              )}
+            </label>
+          ))}
+
           <label>
             Bio
             <textarea
@@ -162,45 +180,51 @@ export default function ProfileFormModal({ profile, error, onSave, onClose }) {
             />
           </label>
 
-          <div className="profile-form-location">
-            <label className="profile-form-location-label">
-              Location
-              <span className="profile-form-location-hint">
-                {hasLocation
-                  ? `${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`
-                  : 'Search an address or click the map'}
-              </span>
-            </label>
+          {supportsLocation && (
+            <div className="profile-form-location">
+              <label className="profile-form-location-label">
+                Location
+                <span className="profile-form-location-hint">
+                  {hasLocation
+                    ? `${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`
+                    : 'Search an address or click the map'}
+                </span>
+              </label>
 
-            <div className="profile-form-location-search">
-              <input
-                type="text"
-                placeholder="Search for an address…"
-                value={searchQuery}
-                onChange={handleSearchInput}
+              <div className="profile-form-location-search">
+                <input
+                  type="text"
+                  placeholder="Search for an address…"
+                  value={searchQuery}
+                  onChange={handleSearchInput}
+                />
+                {searching && <p className="profile-form-location-status">Searching…</p>}
+                {searchError && (
+                  <p className="profile-form-location-status profile-form-location-status--error">
+                    {searchError}
+                  </p>
+                )}
+                {searchResults.length > 0 && (
+                  <ul className="profile-form-location-results">
+                    {searchResults.map((r) => (
+                      <li key={r.place_id}>
+                        <button type="button" onClick={() => selectSearchResult(r)}>
+                          {r.display_name}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              <LocationPicker
+                lat={location.lat}
+                lng={location.lng}
+                onChange={handleLocationChange}
+                height={200}
               />
-              {searching && <p className="profile-form-location-status">Searching…</p>}
-              {searchError && <p className="profile-form-location-status profile-form-location-status--error">{searchError}</p>}
-              {searchResults.length > 0 && (
-                <ul className="profile-form-location-results">
-                  {searchResults.map((r) => (
-                    <li key={r.place_id}>
-                      <button type="button" onClick={() => selectSearchResult(r)}>
-                        {r.display_name}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
             </div>
-
-            <LocationPicker
-              lat={location.lat}
-              lng={location.lng}
-              onChange={handleLocationChange}
-              height={200}
-            />
-          </div>
+          )}
 
           <div className="profile-form-actions">
             <button type="button" onClick={onClose} disabled={saving}>

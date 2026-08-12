@@ -6,6 +6,8 @@ import SchedulingSection from './SchedulingSection';
 import TransactionsReviewsSection from './TransactionsReviewsSection';
 import DocumentEditorSection from './DocumentEditorSection';
 import FinancialSection from './FinancialSection';
+import MessagesSection from '../components/dashboard/MessagesSection';
+import PublicChatPage from '../pages/PublicChatPage';
 import { IconBriefcase, IconCalendar, IconDocument, IconInbox, IconUser, IconWallet } from './Icons';
 
 const TABS = [
@@ -14,6 +16,8 @@ const TABS = [
   { key: 'schedule', label: 'Availability', icon: IconCalendar },
   { key: 'transactions', label: 'Transactions & reviews', icon: IconBriefcase },
   { key: 'documents', label: 'Documents', icon: IconDocument },
+  { key: 'messages', label: 'Messages', icon: IconInbox }, // TODO: swap for a dedicated chat icon if Icons.js has one
+  { key: 'Public Chat', label: 'Public Chat', icon: IconInbox }, // TODO: same — reusing IconInbox as a placeholder
   { key: 'finance', label: 'Finance', icon: IconWallet },
 ];
 
@@ -25,7 +29,8 @@ const TABS = [
 
   Props:
   - userId: current professional's profiles.id (from useAuth() in your app)
-  - roleConfig: entry from roleConfigs.js
+  - roleConfig: entry from roleConfigs.js — label, dashboardTitle, role,
+    credentialFields, and (new) supportsLocation
 */
 export default function ProfessionalDashboardShell({ userId, roleConfig }) {
   const [tab, setTab] = useState('profile');
@@ -34,8 +39,9 @@ export default function ProfessionalDashboardShell({ userId, roleConfig }) {
     <div className="pd-root">
       <div className="pd-shell">
         <aside className="pd-sidebar">
-          <div className="pd-brand">
-            Market Place
+          <div className="pd-brand" style={{fontFamily:'italic'}}>
+            The Real Estate Platform
+            <br />
             <span>{roleConfig.label} portal</span>
           </div>
           {TABS.map(({ key, label, icon: Icon }) => (
@@ -64,7 +70,9 @@ export default function ProfessionalDashboardShell({ userId, roleConfig }) {
           {tab === 'schedule' && <SchedulingSection userId={userId} roleConfig={roleConfig} />}
           {tab === 'transactions' && <TransactionsReviewsSection userId={userId} roleConfig={roleConfig} />}
           {tab === 'documents' && <DocumentEditorSection userId={userId} roleConfig={roleConfig} />}
+          {tab === 'messages' && <MessagesSection />}
           {tab === 'finance' && <FinancialSection userId={userId} />}
+          {tab === 'Public Chat' && <PublicChatPage userId={userId} roleConfig={roleConfig} />}
         </main>
       </div>
     </div>

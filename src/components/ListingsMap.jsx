@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -28,13 +27,12 @@ function validProperties(properties) {
   return properties.filter((p) => p.location_lat && p.location_lng);
 }
 
-export default function ListingsMap({ properties }) {
+export default function ListingsMap({ properties, onMarkerClick }) {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const markersLayerRef = useRef(null);
-  const navigate = useNavigate();
-  const navigateRef = useRef(navigate);
-  navigateRef.current = navigate;
+  const onMarkerClickRef = useRef(onMarkerClick);
+  onMarkerClickRef.current = onMarkerClick;
 
   const applyData = (map, props) => {
     const layer = markersLayerRef.current;
@@ -51,7 +49,9 @@ export default function ListingsMap({ properties }) {
         { closeButton: false, offset: [0, -6] }
       );
 
-      marker.on('click', () => navigateRef.current(`/listings/${p.id}`));
+      // Route through the same paywall gate the card grid uses — never
+      // navigate straight to the detail route from the map.
+      marker.on('click', () => onMarkerClickRef.current?.(p.id));
       marker.on('mouseover', () => marker.openPopup());
       marker.on('mouseout', () => marker.closePopup());
 

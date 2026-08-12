@@ -5,6 +5,7 @@ import { db } from '../lib/supabaseClient';
 import ListingsMap from '../components/ListingsMap';
 import CountrySelect from '../components/CountrySelect';
 import PublicListingCard from '../components/PublicListingCard';
+import ListingUnlockGate from '../components/ListingUnlockGate';
 import '../styles/listings.css';
 import LoadingSpinner from '../components/LoadingSpinner';
 
@@ -16,6 +17,9 @@ export default function Listings() {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Which listing the buyer just clicked — drives the paywall modal.
+  const [pendingListingId, setPendingListingId] = useState(null);
 
   const [filters, setFilters] = useState(() => ({
     search: searchParams.get('search') || '',
@@ -49,18 +53,20 @@ export default function Listings() {
 
   useEffect(() => {
     let isCurrentRequest = true;
-
+setLoading(true);
     async function fetchProperties() {
-      setLoading(true);
+      
       setError(null);
 
+      // NOTE: `description` intentionally excluded here — this is the
+      // paywalled full write-up and has no reason to reach the browser
+      // before a buyer has paid. Cards/map only need the preview fields.
       let query = db
         .schema('marketplace')
         .from('listings')
         .select(`
           id,
           title,
-          description,
           property_type,
           price,
           address,
@@ -134,6 +140,10 @@ export default function Listings() {
     };
   }, [filters]);
 
+  // Single entry point for both the card grid and the map — nobody sees
+  // detail without going through this gate first.
+  const requestListingDetail = (listingId) => setPendingListingId(listingId);
+
   return (
     <div className="listings-page">
       <header className="listings-header">
@@ -205,7 +215,7 @@ export default function Listings() {
                   <PublicListingCard
                     key={property.id}
                     listing={property}
-                    onClick={() => navigate(`/listings/${property.id}`)}
+                    onClick={() => requestListingDetail(property.id)}
                   />
                 ))}
               </div>
@@ -213,9 +223,20 @@ export default function Listings() {
           </div>
 
           <div className="listings-map-col">
-            <ListingsMap properties={properties} />
+            <ListingsMap
+              properties={properties}
+              onMarkerClick={requestListingDetail}
+            />
           </div>
         </div>
+      )}
+
+      {pendingListingId && (
+        <ListingUnlockGate
+          listingId={pendingListingId}
+          onClose={() => setPendingListingId(null)}
+          onUnlocked={() => navigate(`/listings/${pendingListingId}`)}
+        />
       )}
     </div>
   );

@@ -21,6 +21,7 @@ import { AdminRoute } from './components/AdminRoute';
 import MessagesSection from './components/dashboard/MessagesSection'; // Add this import
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
+import PesapalCallback from './pages/PesapalCallback'; // Import the CSS file for styling
 
 export default function App() {
   return (
@@ -130,6 +131,14 @@ export default function App() {
     <AdminRoute>
       <AdminDashboard />
     </AdminRoute>
+  }
+/>
+<Route
+  path="/payment/pesapal/callback"
+  element={
+    <ProtectedRoute>
+      <PesapalCallback/>
+    </ProtectedRoute>
   }
 />
 

@@ -1,0 +1,124 @@
+/*
+  incoming-requests.css
+  Scoped styling for IncomingRequestsSection's request cards only.
+  Deliberately does NOT redefine .pd-btn-primary / .pd-btn-ghost / .pd-badge —
+  those are assumed to already exist in your shared provider-dashboard
+  stylesheet. If .pd-btn-primary isn't already dark maroon there, say so and
+  scoped overrides can be added here instead of touching the shared class.
+
+  Colors are picked to match the cream/white + maroon look already visible
+  in your dashboard (adjust the hex values if your real tokens differ).
+*/
+
+.pd-request-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pd-request-card {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #ece1d6;
+  border-radius: 14px;
+  padding: 18px 20px 16px 24px;
+  box-shadow: 0 1px 2px rgba(43, 33, 28, 0.04);
+  transition: box-shadow 160ms ease, transform 160ms ease;
+}
+
+.pd-request-card:hover {
+  box-shadow: 0 6px 18px rgba(43, 33, 28, 0.08);
+  transform: translateY(-1px);
+}
+
+/* Left status stripe — reads status at a glance, especially useful in the
+   "All" tab where pending/accepted/declined requests sit side by side. */
+.pd-request-card::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  left: 0;
+  width: 4px;
+  border-radius: 3px;
+  background: #d8cdbf;
+}
+
+.pd-request-card[data-status='pending']::before { background: #c08a1f; }
+.pd-request-card[data-status='accepted']::before { background: #2f6b4f; }
+.pd-request-card[data-status='declined']::before { background: #a23b3b; }
+
+.pd-request-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.pd-request-client {
+  font-family: var(--pd-font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #2b211c;
+  line-height: 1.3;
+}
+
+.pd-request-role-tag {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.75rem;
+  color: #948577;
+}
+
+.pd-request-status {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.pd-request-status.pending { background: #fbf1dd; color: #96690f; }
+.pd-request-status.accepted { background: #e6f3ec; color: #2f6b4f; }
+.pd-request-status.declined { background: #fbeaea; color: #a23b3b; }
+
+.pd-request-meta {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  row-gap: 7px;
+  column-gap: 10px;
+}
+
+.pd-request-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #a89a8c;
+  padding-top: 1px;
+}
+
+.pd-request-value {
+  font-size: 0.92rem;
+  color: #3a2f28;
+  line-height: 1.4;
+}
+
+.pd-request-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #f1e8de;
+}
+
+@media (max-width: 480px) {
+  .pd-request-meta { grid-template-columns: 92px 1fr; }
+  .pd-request-header { flex-direction: column; }
+  .pd-request-status { align-self: flex-start; }
+}
