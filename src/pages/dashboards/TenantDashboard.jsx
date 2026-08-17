@@ -220,7 +220,7 @@ export default function TenantDashboard() {
       <aside className="tenant-sidebar">
         <div className="sidebar-brand">
           <Building2 size={28} />
-          <span>RentHub</span>
+          <span>Marketplace</span>
         </div>
 
         <div className="sidebar-profile">
