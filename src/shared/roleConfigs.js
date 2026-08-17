@@ -4,18 +4,19 @@
   section components stay generic while each dashboard shows the right
   labels, credential fields, and task_key.
 
-  ASSUMPTION TO VERIFY: task_key values must match whatever keys
-  EngageProfessionalsModule / StageTaskModule already use for these roles
-  (mentioned as hire_lawyer / schedule_valuer / schedule_surveyor). If your
-  actual key names differ, update them here only — nothing else needs to change.
+  taskKey values match marketplace.transaction_provider_engagements.task_key
+  exactly as written by Stage1Connect.handleEngage() ('lawyer' | 'valuer' |
+  'surveyor'). If you ever change what Stage1Connect writes, update these
+  values to match — nothing else needs to change.
 */
 
 export const ROLE_CONFIGS = {
   lawyer: {
     role: 'lawyer',
     label: 'Lawyer',
-    taskKey: 'hire_lawyer',
+    taskKey: 'lawyer',
     dashboardTitle: 'Lawyer dashboard',
+    supportsLocation: true,
     credentialFields: [
       { key: 'license_number', label: 'LSK practising certificate no.', mono: true },
       { key: 'firm_name', label: 'Law firm / chambers' },
@@ -33,8 +34,9 @@ export const ROLE_CONFIGS = {
   surveyor: {
     role: 'surveyor',
     label: 'Surveyor',
-    taskKey: 'schedule_surveyor',
+    taskKey: 'surveyor',
     dashboardTitle: 'Surveyor dashboard',
+    supportsLocation: true,
     credentialFields: [
       { key: 'license_number', label: 'Surveyors Board of Kenya reg. no.', mono: true },
       { key: 'firm_name', label: 'Firm / practice name' },
@@ -51,8 +53,9 @@ export const ROLE_CONFIGS = {
   valuer: {
     role: 'valuer',
     label: 'Valuer',
-    taskKey: 'schedule_valuer',
+    taskKey: 'valuer',
     dashboardTitle: 'Valuer dashboard',
+    supportsLocation: true,
     credentialFields: [
       { key: 'license_number', label: 'Valuers Registration Board no.', mono: true },
       { key: 'firm_name', label: 'Firm / practice name' },

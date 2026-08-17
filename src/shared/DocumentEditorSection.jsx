@@ -1,31 +1,56 @@
 import { useEffect, useRef, useState } from 'react';
-import { supabase } from '../lib/supabaseclient'; // ADJUST to your actual client path
+import { supabase } from '../lib/supabaseClient';
 import { IconDocument, IconPlus, IconSend } from './Icons';
 
 /*
   DocumentEditorSection
   Draft documents (sale agreements, survey reports, valuation reports, etc.)
-  and send them to the client on a transaction.
+  and send them to the client on a transaction. Providers can type content
+  directly in the rich text editor and/or attach an uploaded file (PDF, Word,
+  Excel, image) — both are optional and independent of each other.
+
+  ATTACHMENT STORAGE: moved off Supabase Storage to Cloudflare R2, via two
+  Supabase Edge Functions (still Supabase-hosted, just writing to R2):
+    - upload-provider-document   (POST multipart 'file' -> storageKey/fileName/mimeType/sizeBytes)
+    - get-provider-document-url  (POST { storageKey } -> signed GET url, 5 min TTL)
+  Called with supabase.functions.invoke(), which reuses the current session's
+  Authorization header automatically — no manual token plumbing needed.
+
+  NOTE: there's no delete-provider-document function yet. removeAttachment()
+  below only clears the DB reference; the R2 object is orphaned until a
+  delete endpoint exists. Same "untidy, not harmful" tradeoff as before,
+  just without even the best-effort cleanup call.
+
+  Document rows themselves (title/content/doc_type/status/attachment_*)
+  still read/write directly against Supabase Postgres (marketplace.documents)
+  — only the file bytes moved to R2. ASSUMPTION: table is still
+  marketplace.documents, not marketplace.provider_documents (the edge
+  function comments reference that name — verify before shipping).
 
   Uses a small contentEditable-based rich text editor (bold / italic /
   underline / bullet list / headings) rather than pulling in an editor
-  dependency you may not have installed. Swap the toolbar + `.pd-editor` div
-  for TipTap/Slate/etc. later if you'd rather standardize on one.
-
-  ASSUMPTIONS TO VERIFY:
-  - `documents` table columns: id, provider_id, transaction_id, recipient_name,
-    title, doc_type, content (text/html), status ('draft' | 'sent'),
-    created_at, sent_at.
-  - Recipients are pulled from accepted rows in provider_engagement_requests
-    (see IncomingRequestsSection) — if you track "who is my current client"
-    differently, only `loadRecipients()` below needs to change.
-  - Sending currently just flips status to 'sent' and stamps sent_at. If you
-    want the client to actually get notified in-app, that's where you'd also
-    insert into `messages`/`conversations` — left out here since I don't have
-    that table's exact shape, but the hook point is marked below.
+  dependency you may not have installed.
 
   Props: userId, roleConfig
 */
+
+const MAX_ATTACHMENT_MB = 25; // matches MAX_BYTES in upload-provider-document
+
+function IconPaperclip({ width = 14, height = 14 }) {
+  return (
+    <svg width={width} height={height} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+    </svg>
+  );
+}
+
+function formatFileSize(bytes) {
+  if (bytes === null || bytes === undefined) return '';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 export default function DocumentEditorSection({ userId, roleConfig }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,13 +58,15 @@ export default function DocumentEditorSection({ userId, roleConfig }) {
   const [recipients, setRecipients] = useState([]);
   const [activeDoc, setActiveDoc] = useState(null); // null = list view
   const [saving, setSaving] = useState(false);
+  const [uploadingAttachment, setUploadingAttachment] = useState(false);
   const editorRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     loadDocuments();
     loadRecipients();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  }, [userId, roleConfig.taskKey]);
 
   async function loadDocuments() {
     setLoading(true);
@@ -56,13 +83,62 @@ export default function DocumentEditorSection({ userId, roleConfig }) {
   }
 
   async function loadRecipients() {
-    const { data } = await supabase
+    const { data: engagements, error: engagementsError } = await supabase
       .schema('marketplace')
-      .from('provider_engagement_requests')
-      .select('id, client_name, transaction_id')
+      .from('transaction_provider_engagements')
+      .select('id, transaction_id')
       .eq('provider_id', userId)
+      .eq('task_key', roleConfig.taskKey)
       .eq('status', 'accepted');
-    setRecipients(data || []);
+
+    if (engagementsError) {
+      setError(engagementsError.message);
+      setRecipients([]);
+      return;
+    }
+
+    if (!engagements?.length) {
+      setRecipients([]);
+      return;
+    }
+
+    const transactionIds = [...new Set(engagements.map((e) => e.transaction_id))];
+    const { data: transactions, error: transactionsError } = await supabase
+      .schema('marketplace')
+      .from('transactions')
+      .select('id, buyer_id')
+      .in('id', transactionIds);
+
+    if (transactionsError) {
+      setError(transactionsError.message);
+      setRecipients([]);
+      return;
+    }
+
+    const buyerIdByTransaction = new Map((transactions || []).map((t) => [t.id, t.buyer_id]));
+
+    const buyerIds = [...new Set((transactions || []).map((t) => t.buyer_id).filter(Boolean))];
+    const { data: profiles, error: profilesError } = buyerIds.length
+      ? await supabase
+          .schema('marketplace')
+          .from('profiles')
+          .select('id, full_name')
+          .in('id', buyerIds)
+      : { data: [], error: null };
+
+    if (profilesError) {
+      setError(profilesError.message);
+    }
+
+    const nameById = new Map((profiles || []).map((p) => [p.id, p.full_name]));
+
+    setRecipients(
+      engagements.map((e) => ({
+        id: e.id,
+        transaction_id: e.transaction_id,
+        client_name: nameById.get(buyerIdByTransaction.get(e.transaction_id)) || 'Unnamed client',
+      }))
+    );
   }
 
   function startNewDocument() {
@@ -74,6 +150,10 @@ export default function DocumentEditorSection({ userId, roleConfig }) {
       transaction_id: null,
       content: '',
       status: 'draft',
+      attachment_path: null,
+      attachment_name: null,
+      attachment_size: null,
+      attachment_type: null,
     });
   }
 
@@ -92,6 +172,68 @@ export default function DocumentEditorSection({ userId, roleConfig }) {
     document.execCommand(command, false, value);
   }
 
+  async function handleFileSelect(e) {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // reset so selecting the same file again still fires onChange
+    if (!file) return;
+
+    if (file.size > MAX_ATTACHMENT_MB * 1024 * 1024) {
+      setError(`"${file.name}" is larger than ${MAX_ATTACHMENT_MB}MB. Please choose a smaller file.`);
+      return;
+    }
+
+    setError(null);
+    setUploadingAttachment(true);
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const { data, error: uploadError } = await supabase.functions.invoke('upload-provider-document', {
+      body: formData,
+    });
+
+    setUploadingAttachment(false);
+
+    if (uploadError) {
+      setError(uploadError.message || 'Upload failed');
+      return;
+    }
+
+    setActiveDoc((d) => ({
+      ...d,
+      attachment_path: data.storageKey,
+      attachment_name: data.fileName,
+      attachment_size: data.sizeBytes,
+      attachment_type: data.mimeType,
+    }));
+  }
+
+  async function removeAttachment() {
+    if (!activeDoc?.attachment_path) return;
+
+    // No delete-provider-document edge function exists yet — this only
+    // clears the DB-facing reference. The R2 object itself is orphaned
+    // until a delete endpoint is added (see file header note).
+    setActiveDoc((d) => ({
+      ...d,
+      attachment_path: null,
+      attachment_name: null,
+      attachment_size: null,
+      attachment_type: null,
+    }));
+  }
+
+  async function openAttachment(storageKey) {
+    const { data, error: signError } = await supabase.functions.invoke('get-provider-document-url', {
+      body: { storageKey },
+    });
+    if (signError) {
+      setError(signError.message || 'Could not generate view link');
+      return;
+    }
+    window.open(data.url, '_blank', 'noopener,noreferrer');
+  }
+
   async function saveDocument(nextStatus) {
     if (!activeDoc.title.trim()) {
       setError('Give the document a title before saving.');
@@ -108,6 +250,10 @@ export default function DocumentEditorSection({ userId, roleConfig }) {
       transaction_id: activeDoc.transaction_id || null,
       content,
       status: nextStatus,
+      attachment_path: activeDoc.attachment_path || null,
+      attachment_name: activeDoc.attachment_name || null,
+      attachment_size: activeDoc.attachment_size || null,
+      attachment_type: activeDoc.attachment_type || null,
       ...(nextStatus === 'sent' ? { sent_at: new Date().toISOString() } : {}),
     };
 
@@ -121,9 +267,6 @@ export default function DocumentEditorSection({ userId, roleConfig }) {
       setError(err.message);
       return;
     }
-    // Hook point: if you want the client notified in-app when a document is
-    // sent, insert into your messages/conversations table here using
-    // data.transaction_id / activeDoc.recipient_name.
     setActiveDoc(null);
     loadDocuments();
   }
@@ -236,14 +379,80 @@ export default function DocumentEditorSection({ userId, roleConfig }) {
             </div>
           </div>
 
+          <div className="pd-field">
+            <label>Attachment (optional)</label>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg"
+              style={{ display: 'none' }}
+              onChange={handleFileSelect}
+            />
+            {activeDoc.attachment_name ? (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  border: '1px solid var(--pd-border)',
+                  borderRadius: 'var(--pd-radius-sm)',
+                  padding: '10px 12px',
+                }}
+              >
+                <IconPaperclip width={14} height={14} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div
+                    style={{
+                      fontSize: '0.88rem',
+                      fontWeight: 500,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {activeDoc.attachment_name}
+                  </div>
+                  {activeDoc.attachment_size != null && (
+                    <div style={{ fontSize: '0.78rem', opacity: 0.65 }}>{formatFileSize(activeDoc.attachment_size)}</div>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  className="pd-btn pd-btn-ghost pd-btn-sm"
+                  onClick={() => openAttachment(activeDoc.attachment_path)}
+                >
+                  View
+                </button>
+                <button
+                  type="button"
+                  className="pd-btn pd-btn-ghost pd-btn-sm"
+                  onClick={removeAttachment}
+                  disabled={uploadingAttachment}
+                >
+                  Remove
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                className="pd-btn pd-btn-ghost"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingAttachment}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+              >
+                <IconPaperclip width={14} height={14} /> {uploadingAttachment ? 'Uploading…' : 'Upload a file'}
+              </button>
+            )}
+          </div>
+
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 6 }}>
-            <button className="pd-btn pd-btn-ghost" onClick={() => saveDocument('draft')} disabled={saving}>
+            <button className="pd-btn pd-btn-ghost" onClick={() => saveDocument('draft')} disabled={saving || uploadingAttachment}>
               {saving ? 'Saving…' : 'Save draft'}
             </button>
             <button
               className="pd-btn pd-btn-primary"
               onClick={() => saveDocument('sent')}
-              disabled={saving || !activeDoc.recipient_name}
+              disabled={saving || uploadingAttachment || !activeDoc.recipient_name}
               title={!activeDoc.recipient_name ? 'Select a client first' : ''}
             >
               <IconSend width={14} height={14} /> Send to client
@@ -286,6 +495,7 @@ export default function DocumentEditorSection({ userId, roleConfig }) {
                 <span className="pd-list-meta">
                   {roleConfig.documentTypes.find((t) => t.key === doc.doc_type)?.label || doc.doc_type}
                   {doc.recipient_name ? ` — for ${doc.recipient_name}` : ''}
+                  {doc.attachment_name ? ' · has attachment' : ''}
                 </span>
               </div>
               <span className={`pd-badge ${doc.status === 'sent' ? 'success' : 'neutral'}`}>{doc.status}</span>

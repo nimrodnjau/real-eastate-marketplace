@@ -25,6 +25,7 @@ import TenantSavedProperties from './pages/dashboards/TenantSavedProperties';
 import TenantViewings from './pages/dashboards/TenantViewings';
 import TenantProfile from './pages/dashboards/TenantProfile';
 import TenantSettings from './pages/dashboards/TenantSettings';
+import PesapalCallback from './pages/PesapalCallback'; // Import the CSS file for styling
 
 export default function App() {
   return (
@@ -181,6 +182,22 @@ export default function App() {
                   </AdminRoute>
                 }
               />
+<Route
+  path="/admin/*"
+  element={
+    <AdminRoute>
+      <AdminDashboard />
+    </AdminRoute>
+  }
+/>
+<Route
+  path="/payment/pesapal/callback"
+  element={
+    <ProtectedRoute>
+      <PesapalCallback/>
+    </ProtectedRoute>
+  }
+/>
 
           {/* Root now redirects into the welcome flow rather than being the
               dashboard itself */}
