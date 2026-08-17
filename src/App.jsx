@@ -21,6 +21,10 @@ import { AdminRoute } from './components/AdminRoute';
 import MessagesSection from './components/dashboard/MessagesSection'; // Add this import
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
+import TenantSavedProperties from './pages/dashboards/TenantSavedProperties';
+import TenantViewings from './pages/dashboards/TenantViewings';
+import TenantProfile from './pages/dashboards/TenantProfile';
+import TenantSettings from './pages/dashboards/TenantSettings';
 import PesapalCallback from './pages/PesapalCallback'; // Import the CSS file for styling
 
 export default function App() {
@@ -46,24 +50,69 @@ export default function App() {
 
           {/* The actual role dashboard, reached via the "Go to your dashboard"
               button on WelcomePage (or any quick-action card) */}
-          <Route
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <RoleDashboardRoute />
+                </ProtectedRoute>
+              } 
+            />
+
+          {/* <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <RoleDashboardRoute />
+                <TenantDashboard />
+              </ProtectedRoute>
+            }
+          /> */}
+
+          <Route
+            path="/dashboard/saved"
+            element={
+              <ProtectedRoute>
+                <TenantSavedProperties />
               </ProtectedRoute>
             }
           />
 
-          {/* ADD THE MESSAGES ROUTE HERE - inside protected routes */}
           <Route
-            path="/dashboard/messages"
+            path="/dashboard/viewings"
             element={
               <ProtectedRoute>
-                <MessagesSection />
+                <TenantViewings />
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/dashboard/profile"
+            element={
+              <ProtectedRoute>
+                <TenantProfile />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/dashboard/settings"
+            element={
+              <ProtectedRoute>
+                <TenantSettings />
+              </ProtectedRoute>
+            }
+          /> 
+
+          {/* ADD THE MESSAGES ROUTE HERE - inside protected routes */}
+                <Route
+                  path="/dashboard/messages"
+                  element={
+                    <ProtectedRoute>
+                      <MessagesSection />
+                    </ProtectedRoute>
+                  }
+                />
           
               <Route
                 path="/listings"
@@ -73,30 +122,30 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route
-  path="/listings/:id"
-  element={
-    <ProtectedRoute>
-      <ListingDetail />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/purchases/:id"
-  element={
-    <ProtectedRoute>
-      <PurchaseTracker />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/community"
-  element={
-    <ProtectedRoute>
-      <PublicChatPage />
-    </ProtectedRoute>
-  }
-/>
+                <Route
+                  path="/listings/:id"
+                  element={
+                    <ProtectedRoute>
+                      <ListingDetail />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/purchases/:id"
+                  element={
+                    <ProtectedRoute>
+                      <PurchaseTracker />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/community"
+                  element={
+                    <ProtectedRoute>
+                      <PublicChatPage />
+                    </ProtectedRoute>
+                  }
+                />
 
               <Route
                 path="/agents"
@@ -125,6 +174,14 @@ export default function App() {
               />
               <Route path="/admin/login" element={<AdminLogin />} />
 
+              <Route
+                path="/admin/*"
+                element={
+                  <AdminRoute>
+                    <AdminDashboard />
+                  </AdminRoute>
+                }
+              />
 <Route
   path="/admin/*"
   element={
